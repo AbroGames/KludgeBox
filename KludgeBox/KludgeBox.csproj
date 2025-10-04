@@ -1,26 +1,36 @@
 ﻿<Project Sdk="Godot.NET.Sdk/4.5.0">
+   
     <PropertyGroup>
+        <!-- Универсальное значение версии, которое будет скопировано в Version, AssemblyVersion и FileVersion -->
+        <GeneralVersion>2.0.0</GeneralVersion>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <!-- Базовые настройки проекта -->
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         
-        <Version>2.0.0</Version>
+        <!-- Метаданные проекта -->
+        <Version>$(GeneralVersion)</Version>
         <Title>KludgeBox</Title>
         <Authors>Bronuh;AbroGames</Authors>
         <Description>Class library for gamedev in Godot/C#</Description>
         <Copyright>AbroGames</Copyright>
         <PackageProjectUrl>https://github.com/AbroGames/KludgeBox</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/AbroGames/KludgeBox</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>Godot;Library</PackageTags>
-        
+
+        <!-- Включение SourceLink для упрощения отладки либы конечным пользователем -->
+        <RepositoryUrl>https://github.com/AbroGames/KludgeBox</RepositoryUrl>
         <IncludeSymbols>true</IncludeSymbols>
         <IncludeSource>true</IncludeSource>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-        
-        <AssemblyVersion>2.0.0</AssemblyVersion>
-        <FileVersion>2.0.0</FileVersion>
+
+        <!-- Дополнительные свойства для версии сборки и файла сборки внутри пакета -->
+        <AssemblyVersion>$(GeneralVersion)</AssemblyVersion>
+        <FileVersion>$(GeneralVersion)</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -29,6 +39,7 @@
         <PackageReference Include="Serilog.Sinks.Async" Version="2.1.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
 
+        <!-- Включение SourceLink для упрощения отладки либы конечным пользователем -->
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
     </ItemGroup>
 
