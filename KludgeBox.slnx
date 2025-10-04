@@ -1,0 +1,6 @@
+<Solution>
+   <Project Path="KludgeBox/KludgeBox.csproj" />
+   <Folder Name="/Solution Files/">
+       <File Path=".gitignore" />
+   </Folder> 
+</Solution>

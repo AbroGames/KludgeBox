@@ -1,0 +1,105 @@
+[gd_scene load_steps=6 format=3 uid="uid://dbu3aj8o1mrdg"]
+
+[ext_resource type="Script" uid="uid://bp5sm13njrf2w" path="res://Src/KludgeBox/Testing/TestingScene/Tester.cs" id="1_0n3jq"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_gi4gn"]
+font_color = Color(1, 0.2, 0.172549, 1)
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_6eiwg"]
+font_color = Color(0.305882, 0.815686, 0, 1)
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_pi7dh"]
+font_color = Color(0, 0.762014, 0.929602, 1)
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_qb5pd"]
+font_color = Color(0.720033, 0.71737, 0, 1)
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Tester" type="Node" node_paths=PackedStringArray("_trackersContainer", "_totalLabel", "_passedLabel", "_failedLabel", "_skippedLabel", "_unknownLabel")]
+script = ExtResource("1_0n3jq")
+_trackersContainer = NodePath("Control/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer")
+_totalLabel = NodePath("Control/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TotalLabel")
+_passedLabel = NodePath("Control/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/PassedTests")
+_failedLabel = NodePath("Control/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/FailedTests")
+_skippedLabel = NodePath("Control/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/SkippedTests")
+_unknownLabel = NodePath("Control/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/UnknownTests")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/VBoxContainer/MarginContainer"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/VBoxContainer/MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/VBoxContainer/PanelContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/VBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="TotalLabel" type="Label" parent="Control/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Running X/Y tests"
+
+[node name="FailedTests" type="Label" parent="Control/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Failed:"
+label_settings = SubResource("LabelSettings_gi4gn")
+
+[node name="PassedTests" type="Label" parent="Control/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Passed:"
+label_settings = SubResource("LabelSettings_6eiwg")
+
+[node name="SkippedTests" type="Label" parent="Control/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Skipped:"
+label_settings = SubResource("LabelSettings_pi7dh")
+
+[node name="UnknownTests" type="Label" parent="Control/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Unknown:"
+label_settings = SubResource("LabelSettings_qb5pd")
+
+[node name="TestsContainer" type="Node" parent="."]

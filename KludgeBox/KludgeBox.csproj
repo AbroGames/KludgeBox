@@ -1,0 +1,38 @@
+﻿<Project Sdk="Godot.NET.Sdk/4.5.0">
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        
+        <Version>2.0.0</Version>
+        <Title>KludgeBox</Title>
+        <Authors>Bronuh;AbroGames</Authors>
+        <Description>Class library for gamedev in Godot/C#</Description>
+        <Copyright>AbroGames</Copyright>
+        <PackageProjectUrl>https://github.com/AbroGames/KludgeBox</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/AbroGames/KludgeBox</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>Godot;Library</PackageTags>
+        
+        <IncludeSymbols>true</IncludeSymbols>
+        <IncludeSource>true</IncludeSource>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        
+        <AssemblyVersion>2.0.0</AssemblyVersion>
+        <FileVersion>2.0.0</FileVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Humanizer" Version="2.14.1" />
+        <PackageReference Include="Serilog" Version="4.3.0" />
+        <PackageReference Include="Serilog.Sinks.Async" Version="2.1.0" />
+        <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
+    </ItemGroup>
+
+    <PropertyGroup>
+        <NoWarn>CS0649</NoWarn>
+    </PropertyGroup>
+</Project>
