@@ -1,6 +1,7 @@
 <Solution>
-   <Project Path="KludgeBox/KludgeBox.csproj" />
-   <Folder Name="/Solution Files/">
-       <File Path=".gitignore" />
-   </Folder> 
+  <Folder Name="/Solution Files/">
+    <File Path=".gitignore" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="KludgeBox/KludgeBox.csproj" />
 </Solution>

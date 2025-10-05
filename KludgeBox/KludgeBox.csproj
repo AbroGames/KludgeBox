@@ -2,7 +2,7 @@
    
     <PropertyGroup>
         <!-- Универсальное значение версии, которое будет скопировано в Version, AssemblyVersion и FileVersion -->
-        <GeneralVersion>2.0.0</GeneralVersion>
+        <GeneralVersion>2.0.1</GeneralVersion>
     </PropertyGroup>
     
     <PropertyGroup>
@@ -19,14 +19,17 @@
         <PackageProjectUrl>https://github.com/AbroGames/KludgeBox</PackageProjectUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>Godot;Library</PackageTags>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
 
-        <!-- Включение SourceLink для упрощения отладки либы конечным пользователем -->
+        <!-- Настройка SourceLink для упрощения отладки либы конечным пользователем -->
         <RepositoryUrl>https://github.com/AbroGames/KludgeBox</RepositoryUrl>
         <IncludeSymbols>true</IncludeSymbols>
         <IncludeSource>true</IncludeSource>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <DebugType>embedded</DebugType>
 
         <!-- Дополнительные свойства для версии сборки и файла сборки внутри пакета -->
         <AssemblyVersion>$(GeneralVersion)</AssemblyVersion>
@@ -43,6 +46,10 @@
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <None Include="../README.md" Pack="true" PackagePath="/"/>
+    </ItemGroup>
+    
     <PropertyGroup>
         <NoWarn>CS0649</NoWarn>
     </PropertyGroup>
