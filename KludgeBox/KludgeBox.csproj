@@ -52,6 +52,7 @@
         <PackageProjectUrl>https://github.com/AbroGames/KludgeBox</PackageProjectUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>Godot;Library</PackageTags>
+        <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
 
         <!-- Настройка SourceLink для упрощения отладки либы конечным пользователем -->
@@ -81,6 +82,7 @@
 
     <ItemGroup>
         <None Include="../README.md" Pack="true" PackagePath="/"/>
+        <None Include="icon.png" Pack="true" PackagePath="\"/>
     </ItemGroup>
     
     <PropertyGroup>
