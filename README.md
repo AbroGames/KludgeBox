@@ -34,8 +34,9 @@ dotnet nuget add source "C:\Path\To\LocalNuGetFeed" --name LocalFeed
 - Advanced Build Actions
 - Pack Selected Project
 - В консоли Build Output будет путь к файлу **.nupkg** `Successfully created package`, скопируй его
-- Возьми KludgeBox publishing API key из TickTick/AbroGames/Пароли
+- Возьми KludgeBox publishing API key из хранилища паролей
 - `dotnet nuget push <Successfully created package.nupkg> --api-key <KludgeBox publishing API key> --source https://api.nuget.org/v3/index.json`
+- Ошибку связанную с загрузкой **.snupkg** можно игнорировать, главное, чтобы в консоли было `Your package was pushed.`
 
 > [!NOTE]
 > Тебе нужен именно файл `.nupkg`. 
@@ -43,7 +44,7 @@ dotnet nuget add source "C:\Path\To\LocalNuGetFeed" --name LocalFeed
 > `.snupkg` - файл с отладочными символами, но они по умолчанию зашиваются в основной файл
 
 #### Дополнительные проверки после публикации в nuget.org
-Это не обязательно, но желательно.
-Скачай NuGet Package Explorer, найди в нем этот пакет, дождись, пока последняя версия проиндексируется и проверь,
+Это не обязательно, но желательно.  
+Зайди в [NuGet Package Explorer](https://nuget.info/packages/KludgeBox/), дождись, пока последняя версия проиндексируется и проверь,
 чтобы все строки в разделе Health были с зеленым значком. Если есть желтые или красные значки - можешь
 попытаться опубликовать файл .snupkg
