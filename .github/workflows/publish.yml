@@ -19,6 +19,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Pack
-        run: dotnet pack --output .
+        run: dotnet pack --output . -p:IncludeSymbols=false -p:IncludeSource=false
       - name: Push
         run: dotnet nuget push "*.nupkg" --api-key ${{ secrets.NUGET_TOKEN }} --source https://api.nuget.org/v3/index.json
