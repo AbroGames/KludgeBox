@@ -18,6 +18,6 @@ jobs:
 
     steps:
     - name: Pack
-      run: dotnet pack --no-build --output .
+      run: dotnet pack --output .
     - name: Push
       run: dotnet nuget push "*.nupkg" --api-key ${{ secrets.NUGET_TOKEN }} --source https://api.nuget.org/v3/index.json
