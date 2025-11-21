@@ -10,9 +10,9 @@ public class CmdArgsService
 
     protected readonly string[] CmdArgs = OS.GetCmdlineArgs();
     
-    private bool _logIfEmpty; // Write message to log, then param doesn't exist in args
-    private bool _logIfException; // Write message to log, then we catch Exception while find/parsing param
-    private bool _logIfSuccessful; // Write message to log, then param successfully found
+    private bool _logIfEmpty; // Write message to log, if param doesn't exist in args
+    private bool _logIfException; // Write message to log, if we catch Exception while find/parsing param
+    private bool _logIfSuccessful; // Write message to log, if param successfully found
     
     [Logger] private ILogger _log;
 

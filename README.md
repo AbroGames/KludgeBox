@@ -12,6 +12,7 @@ Class library for gamedev in Godot/C#
 ```shell
 dotnet nuget add source "C:\Path\To\LocalNuGetFeed" --name LocalFeed
 ```
+Можно в качестве KludgeBoxLocalFeed указать папку внутри этого проекта, куда происходит билд **.nupkg** файлов
 
 #### Как публиковать пакеты в локальный фид
 В Rider -> Правой кнопкой по проекту
@@ -19,6 +20,11 @@ dotnet nuget add source "C:\Path\To\LocalNuGetFeed" --name LocalFeed
 -> Pack Selected Project
 -> В консоли Build Output будет путь к файлу **.nupkg** `Successfully created package`
 -> Этот файл ручками переноси в папку локального фида
+
+Можно билдить сразу в нужную папку: `dotnet pack --output "C:\Path\To\LocalNuGetFeed" -p:IncludeSymbols=false -p:IncludeSource=false`  
+Или находясь в другом проекте: `dotnet pack "C:\Path\To\KludgeBox\KludgeBox\KludgeBox.csproj" --output "C:\Path\To\LocalNuGetFeed" -p:IncludeSymbols=false -p:IncludeSource=false`  
+Опционально можно добавить в конец предыдущей команды для обновления кеша зависимого от KludgeBox проекта:  
+`; Remove-Item -Path "$env:USERPROFILE\.nuget\packages\kludgebox" -Recurse -Force; dotnet restore --no-cache`
 
 #### Как найти локальные пакеты
 В Rider 
