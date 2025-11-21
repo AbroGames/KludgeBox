@@ -13,14 +13,19 @@ namespace KludgeBox.Logging;
 public class RichGodotSink : ILogEventSink
 {
     private readonly ITextFormatter _formatter;
+    private readonly Func<bool> _godotPushEnableProvider;
 
-    private static readonly Color PropertyColor = Colors.LightBlue;
-    private static readonly Color ParameterColor = Colors.LightGreen;
+    private static readonly Color PropertyColor = Colors.Blue;
+    private static readonly Color ParameterColor = Colors.Green;
     private static readonly Color ErrorColor = Colors.Red;
+    
+    private static readonly int LevelMaxLength = Enum.GetNames(typeof(LogEventLevel)).Max(s => s.Length);
+    private static readonly int PropertyMaxLength = 25;
 
-    public RichGodotSink(string outputTemplate, IFormatProvider formatProvider)
+    public RichGodotSink(string outputTemplate, IFormatProvider formatProvider, Func<bool> godotPushEnableProvider)
     {
         _formatter = new TemplateRenderer(outputTemplate, formatProvider);
+        _godotPushEnableProvider = godotPushEnableProvider;
     }
 
     public void Emit(LogEvent logEvent)
@@ -28,15 +33,35 @@ public class RichGodotSink : ILogEventSink
         using TextWriter writer = new StringWriter();
         _formatter.Format(logEvent, writer);
         writer.Flush();
+        string logText = writer.ToString();
         
-        GD.PrintRich(writer.ToString());
+        GD.PrintRich(logText);
+        if (logEvent.Exception is not null) GD.Print(logEvent.Exception); 
+        
+        // Если сообщение по уровню критичности ниже Warning, то заканчиваем обработку
+        if (logEvent.Level < LogEventLevel.Warning) return;
+        // Если функция Godot Push отключена, то заканчиваем обработку
+        if (_godotPushEnableProvider == null || !_godotPushEnableProvider()) return;
 
-        if (logEvent.Exception is null) return;
+        using StringWriter godotWriter = new StringWriter();
+        logEvent.RenderMessage(godotWriter);
+        string godotText = godotWriter.ToString();
+
+        if (logEvent.Level is LogEventLevel.Warning)
+        {
+            if (logEvent.Exception is null) 
+                GD.PushWarning(godotText);
+            else
+                GD.PushWarning(godotText + " | ", logEvent.Exception);
+        }
         
-        if (logEvent.Level >= LogEventLevel.Error)
-            GD.PushError(logEvent.Exception);
-        else
-            GD.PushWarning(logEvent.Exception);
+        if (logEvent.Level is LogEventLevel.Error or LogEventLevel.Fatal)
+        {
+            if (logEvent.Exception is null) 
+                GD.PushError(godotText);
+            else
+                GD.PushError(godotText + " | ", logEvent.Exception);
+        }
     }
 
     private class TemplateRenderer : ITextFormatter
@@ -91,15 +116,17 @@ public class RichGodotSink : ILogEventSink
             string color = logLevel switch
             {
                 LogEventLevel.Debug => Colors.DarkGray.ToHtml(),
-                LogEventLevel.Information => Colors.White.ToHtml(),
-                LogEventLevel.Warning => Colors.Yellow.ToHtml(),
+                LogEventLevel.Information => Colors.DimGray.ToHtml(),
+                LogEventLevel.Warning => Colors.DarkOrange.ToHtml(),
                 LogEventLevel.Error => Colors.Red.ToHtml(),
                 LogEventLevel.Fatal => Colors.Purple.ToHtml(),
                 _ => Colors.LightGray.ToHtml(),
             };
-
-            var logLevelString = $"[color=#{color}]{text ?? logLevel.ToString()}[/color]";
             
+            var rawLevelText = text ?? logLevel.ToString();
+            var paddedLevelText = rawLevelText.PadRight(LevelMaxLength);
+            var logLevelString = $"[color=#{color}]{paddedLevelText}[/color]";
+    
             return logLevelString;
         }
 
@@ -168,6 +195,16 @@ public class RichGodotSink : ILogEventSink
                         rawText = rawText.Substring(1, rawText.Length - 2);
                     }
 
+                    //Выравниваем по максимальной длине
+                    if (rawText.Length > PropertyMaxLength)
+                    {
+                        rawText = rawText.Substring(0,PropertyMaxLength - 2) + "..";
+                    }
+                    else
+                    {
+                        rawText = rawText.PadRight(PropertyMaxLength);
+                    }
+
                     output.Write($"[color=#{MixError(PropertyColor, logEvent.Level >= LogEventLevel.Error).ToHtml()}]{rawText}[/color]");
                 }
             };
@@ -191,8 +228,9 @@ public static partial class GodotSinkExtensions
 
     public static LoggerConfiguration GodotRich(this LoggerSinkConfiguration configuration,
                                             string outputTemplate = DefaultGodotSinkOutputTemplate,
-                                            IFormatProvider formatProvider = null)
+                                            IFormatProvider formatProvider = null,
+                                            Func<bool> godotPushEnableProvider = null)
     {
-        return configuration.Sink(new RichGodotSink(outputTemplate, formatProvider));
+        return configuration.Sink(new RichGodotSink(outputTemplate, formatProvider, godotPushEnableProvider));
     }
 }
