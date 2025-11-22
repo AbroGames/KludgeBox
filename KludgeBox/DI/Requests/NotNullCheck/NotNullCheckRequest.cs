@@ -8,7 +8,7 @@ namespace KludgeBox.DI.Requests.NotNullCheck;
 public class NotNullCheckRequest : IProcessingRequest
 {
     private readonly IMemberAccessor _memberAccessor;
-    private bool _throwOnFail;
+    private readonly bool _throwOnFail;
     
     [Logger] private ILogger _log;
     

@@ -1,26 +1,10 @@
 ﻿namespace KludgeBox.Godot.Services;
 
-public class NetworkService
+public abstract class NetworkService
 {
     
-    private Func<bool> _isServerChecker;
-    private Func<bool> _isClientChecker;
-
-    public NetworkService(Func<bool> isServerChecker, Func<bool> isClientChecker)
-    {
-        _isServerChecker = isServerChecker;
-        _isClientChecker = isClientChecker;
-    }
-    
-    public bool IsClient()
-    {
-        return _isClientChecker();
-    }
-    
-    public bool IsServer()
-    {
-        return _isServerChecker();
-    }
+    public abstract bool IsClient();
+    public abstract bool IsServer();
 
     public void DoClient(Action clientAction)
     {

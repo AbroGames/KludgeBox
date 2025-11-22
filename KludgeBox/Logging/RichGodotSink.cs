@@ -15,7 +15,7 @@ public class RichGodotSink : ILogEventSink
     private readonly ITextFormatter _formatter;
     private readonly Func<bool> _godotPushEnableProvider;
 
-    private static readonly Color PropertyColor = Colors.Blue;
+    private static readonly Color PropertyColor = Colors.DodgerBlue;
     private static readonly Color ParameterColor = Colors.Green;
     private static readonly Color ErrorColor = Colors.Red;
     
@@ -124,7 +124,7 @@ public class RichGodotSink : ILogEventSink
             };
             
             var rawLevelText = text ?? logLevel.ToString();
-            var paddedLevelText = rawLevelText.PadRight(LevelMaxLength);
+            var paddedLevelText = rawLevelText.PadLeft(LevelMaxLength);
             var logLevelString = $"[color=#{color}]{paddedLevelText}[/color]";
     
             return logLevelString;
@@ -202,7 +202,7 @@ public class RichGodotSink : ILogEventSink
                     }
                     else
                     {
-                        rawText = rawText.PadRight(PropertyMaxLength);
+                        rawText = rawText.PadLeft(PropertyMaxLength);
                     }
 
                     output.Write($"[color=#{MixError(PropertyColor, logEvent.Level >= LogEventLevel.Error).ToHtml()}]{rawText}[/color]");
