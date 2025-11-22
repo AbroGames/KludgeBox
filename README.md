@@ -24,7 +24,10 @@ dotnet nuget add source "C:\Path\To\LocalNuGetFeed" --name LocalFeed
 Можно билдить сразу в нужную папку: `dotnet pack --output "C:\Path\To\LocalNuGetFeed" -p:IncludeSymbols=false -p:IncludeSource=false`  
 Или находясь в другом проекте: `dotnet pack "C:\Path\To\KludgeBox\KludgeBox\KludgeBox.csproj" --output "C:\Path\To\LocalNuGetFeed" -p:IncludeSymbols=false -p:IncludeSource=false`  
 Опционально можно добавить в конец предыдущей команды для обновления кеша зависимого от KludgeBox проекта:  
-`; Remove-Item -Path "$env:USERPROFILE\.nuget\packages\kludgebox" -Recurse -Force; dotnet restore --no-cache`
+`; Remove-Item -Path "$env:USERPROFILE\.nuget\packages\kludgebox" -Recurse -Force; dotnet restore --no-cache`  
+Можно вызывать эту команду автоматически в зависимом KludgeBox проекте:  
+- Надо создать отдельную конфигурацию типа `Shell Script`, выбрать формат `Script Text` и скопировать туда команду
+- Склонировать конфигурацию запуска проекта, в `Before Launch` над `Build Solution` добавить `Run another configuration` и указать наш скрипт
 
 #### Как найти локальные пакеты
 В Rider 

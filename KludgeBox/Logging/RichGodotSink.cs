@@ -73,7 +73,7 @@ public class RichGodotSink : ILogEventSink
 
         public TemplateRenderer(string outputTemplate, IFormatProvider formatProvider)
         {
-            this._formatProvider = formatProvider;
+            _formatProvider = formatProvider;
 
             MessageTemplate template = new MessageTemplateParser().Parse(outputTemplate);
             _renderers = template.Tokens.Select(

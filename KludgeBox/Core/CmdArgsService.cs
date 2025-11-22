@@ -1,6 +1,5 @@
 ﻿using Godot;
 using KludgeBox.DI.Requests.LoggerInjection;
-using KludgeBox.Logging;
 using Serilog;
 
 namespace KludgeBox.Core;

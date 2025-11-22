@@ -1,7 +1,6 @@
 using Godot;
 using KludgeBox.Core.Cooldown;
 using KludgeBox.DI.Requests.LoggerInjection;
-using KludgeBox.Logging;
 using Serilog;
 
 namespace KludgeBox.Godot.Nodes.Process;
