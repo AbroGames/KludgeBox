@@ -1,6 +1,7 @@
 ﻿using KludgeBox.DI.Requests.ChildInjection;
 using KludgeBox.DI.Requests.DependencyCreation;
 using KludgeBox.DI.Requests.LoggerInjection;
+using KludgeBox.DI.Requests.MpSyncInjection;
 using KludgeBox.DI.Requests.NotNullCheck;
 using KludgeBox.DI.Requests.ParentInjection;
 using KludgeBox.Reflection.Access;
@@ -24,6 +25,7 @@ public class RequestsScanner
         scanner.RegisterRequestScanner(new ChildInjectionRequestScanner());
         scanner.RegisterRequestScanner(new ParentInjectionRequestScanner());
         scanner.RegisterRequestScanner(new NotNullCheckRequestScanner());
+        scanner.RegisterRequestScanner(new MpSyncInjectionRequestScanner());
         
         return scanner;
     }
