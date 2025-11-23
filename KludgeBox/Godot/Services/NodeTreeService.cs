@@ -18,7 +18,7 @@ public class NodeTreeService
     }
     
     /// <summary>
-    /// Get full path for all children of this node
+    /// Get full path for all children of this node.
     /// </summary>
     public string GetFullTree(Node node)
     {
@@ -35,8 +35,8 @@ public class NodeTreeService
     public void LogFullTree(Node node) => _log.Information(GetFullTree(node));
     
     /// <summary>
-    /// Get hash of all children of this node
-    /// Can be used for check equality of Client/Server trees
+    /// Get hash of all children of this node.<br/>
+    /// Can be used for check equality of Client/Server trees.
     /// </summary>
     public string GetTreeHash(Node node)
     {
@@ -56,7 +56,7 @@ public class NodeTreeService
     public void LogTreeHash(Node node) => _log.Information(GetTreeHash(node));
     
     /// <summary>
-    /// Get data from each field and property with attribute [Export]
+    /// Get data from each field and property with attribute <see cref="ExportAttribute"/>.
     /// </summary>
     public string GetExportMembersInfo(Node node)
     {

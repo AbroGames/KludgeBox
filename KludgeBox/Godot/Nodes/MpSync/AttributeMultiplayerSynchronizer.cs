@@ -6,9 +6,18 @@ using Serilog;
 namespace KludgeBox.Godot.Nodes.MpSync;
 
 /// <summary>
-/// This is a MultiplayerSynchronizer that, in its constructor (Node observableNode), automatically scans all properties and fields of the observableNode marked with the Sync attribute and adds them to the SceneReplicationConfig as synchronized.
-/// This node cannot be added from the editor, as it would not work correctly with the MultiplayerSpawner in that case. The SceneReplicationConfig must be set up before _EnterTree().
-/// This means you should either configure it through the editor (in which case you should use the regular MultiplayerSynchronizer) or call the constructor (Node observableNode) before AddChild(attributeMultiplayerSynchronizer). This is our case, and it only works from code.
+/// <b>This node cannot be added from the editor</b><br/>
+/// This is a <see cref="MultiplayerSynchronizer"/>,
+/// which in its constructor <c>AttributeMultiplayerSynchronizer(Node observableNode)</c>,
+/// automatically scans all properties and fields of the <c>observableNode</c>,
+/// marked with the <see cref="SyncAttribute"/> and adds them to the <see cref="SceneReplicationConfig"/> as synchronized.<br/>
+/// <br/>
+/// This node cannot be added from the editor, as it would not work correctly with the <see cref="MultiplayerSpawner"/> in that case.
+/// Because the <see cref="SceneReplicationConfig"/> must be set up before <c>_EnterTree()</c>.<br/>
+/// <br/>
+/// This means you should either configure it through the editor (in which case you should use the regular <see cref="MultiplayerSynchronizer"/>),
+/// or call the constructor <c>AttributeMultiplayerSynchronizer(Node observableNode)</c> before <c>AddChild(attributeMultiplayerSynchronizer)</c>.
+/// This is our case, and it only works from code.
 /// </summary>
 // ReSharper disable once Godot.MissingParameterlessConstructor
 public partial class AttributeMultiplayerSynchronizer : MultiplayerSynchronizer

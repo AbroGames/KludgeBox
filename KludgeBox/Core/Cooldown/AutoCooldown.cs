@@ -1,12 +1,15 @@
 namespace KludgeBox.Core.Cooldown;
 
+/// <summary>
+/// A looping timer that counts down and executes the specified action <c>actionWhenReady</c> at the end of each cycle.<br/>
+/// Restarts automatically.
+/// </summary>
 public class AutoCooldown : Cooldown
 {
     
-    /// <summary>
-    /// Initializes a new instance of the <see cref="AutoCooldown"/> class with the specified duration.
-    /// </summary>
     /// <param name="duration">The duration of the cooldown in seconds.</param>
+    /// <param name="isActivated">If false, the cooldown starts only after manually calling <c>Start()</c>.</param>
+    /// <param name="actionWhenReady">Invoked when the counter completes.</param>
     public AutoCooldown(double duration, bool isActivated = true, Action actionWhenReady = null) : 
         base(duration, isActivated, actionWhenReady) { }
 
@@ -16,12 +19,12 @@ public class AutoCooldown : Cooldown
     /// <param name="deltaTime">The time elapsed since the last update in seconds.</param>
     public void Update(double deltaTime)
     {
-        if (!_isActivated) return;
+        if (!IsActivated) return;
 		
-        _timeLeft -= deltaTime;
-        while (_timeLeft <= 0)
+        TimeLeft -= deltaTime;
+        while (TimeLeft <= 0)
         {
-            _timeLeft += Duration;
+            TimeLeft += Duration;
             ActivateAction();
         }
     }
@@ -31,8 +34,8 @@ public class AutoCooldown : Cooldown
     /// </summary>
     public void Reset()
     {
-        _timeLeft = Duration;
-        _isActivated = false;
+        TimeLeft = Duration;
+        IsActivated = false;
     }
 
     /// <summary>
@@ -41,16 +44,16 @@ public class AutoCooldown : Cooldown
     public void Restart()
     {
         Reset();
-        _isActivated = true;
+        IsActivated = true;
     }
 
     public void Start()
     {
-        _isActivated = true;
+        IsActivated = true;
     }
 
     public void Pause()
     {
-        _isActivated = false;
+        IsActivated = false;
     }
 }
