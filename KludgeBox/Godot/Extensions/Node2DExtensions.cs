@@ -96,4 +96,53 @@ public static class Node2DExtensions
     /// Calculates the global distance between a specified position and the Node2D instance.
     /// </summary>
     public static double GlobalDistanceTo(this Vector2 pos, Node2D other) => pos.DistanceTo(other.GlobalPosition);
+    
+    /// <summary>
+    /// Smoothly rotate this node to target angle.<br/>
+    /// Use it in Process/PhysicProcess.
+    /// </summary>
+    public static void RotateToTarget(this Node2D node, float targetAngleDeg, double rotationSpeedDegInSec, double processDeltaTime)
+    {
+        if (rotationSpeedDegInSec == 0) return;
+    
+        // The angle difference required to turn (sign indicates direction)
+        double deltaAngleToTargetAngle = Mathf.AngleDifference(node.Rotation - Mathf.Pi / 2, targetAngleDeg);
+    
+        // Rotation direction only (-1, 0, 1)
+        double directionToTargetAngle = Mathf.Sign(deltaAngleToTargetAngle);
+    
+        // Max rotation speed (per second)
+        double rotationSpeedRad = Mathf.DegToRad(rotationSpeedDegInSec);
+    
+        // Max rotation speed (scaled by delta time)
+        rotationSpeedRad *= processDeltaTime;
+    
+        // If the remaining angle is less than the max speed, clamp the speed to align exactly with the target
+        rotationSpeedRad = Mathf.Min(rotationSpeedRad, Mathf.Abs(deltaAngleToTargetAngle));
+    
+        // Apply direction to the rotation speed
+        rotationSpeedRad *= directionToTargetAngle;
+    
+        // Apply the rotation
+        node.Rotation += (float) rotationSpeedRad;
+    }
+    
+    /// <summary>
+    /// Smoothly rotate this node to target position.<br/>
+    /// Use it in Process/PhysicProcess.
+    /// </summary>
+    public static void RotateToTarget(this Node2D node, Vector2 targetPosition, double rotationSpeedDegInSec, double processDeltaTime)
+    {
+        RotateToTarget(node, node.Position.AngleToPoint(targetPosition), rotationSpeedDegInSec, processDeltaTime);
+    }
+    
+    /// <summary>
+    /// Smoothly rotate this node to position of target node.<br/>
+    /// Use it in Process/PhysicProcess.
+    /// </summary>
+    public static void RotateToTarget(this Node2D node, Node2D target, double rotationSpeedDegInSec, double processDeltaTime)
+    {
+        RotateToTarget(node, node.Position.AngleToPoint(target.Position), rotationSpeedDegInSec, processDeltaTime);
+    }
+
 }
