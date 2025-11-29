@@ -131,9 +131,9 @@ public static class Node2DExtensions
     /// Smoothly rotate this node to target position.<br/>
     /// Use it in Process/PhysicProcess.
     /// </summary>
-    public static void RotateToTarget(this Node2D node, Vector2 targetPosition, double rotationSpeedDegInSec, double processDeltaTime)
+    public static void RotateToTarget(this Node2D node, Vector2 targetGlobalPosition, double rotationSpeedDegInSec, double processDeltaTime)
     {
-        RotateToTarget(node, node.Position.AngleToPoint(targetPosition), rotationSpeedDegInSec, processDeltaTime);
+        RotateToTarget(node, node.GlobalPosition.AngleToPoint(targetGlobalPosition), rotationSpeedDegInSec, processDeltaTime);
     }
     
     /// <summary>
@@ -142,7 +142,7 @@ public static class Node2DExtensions
     /// </summary>
     public static void RotateToTarget(this Node2D node, Node2D target, double rotationSpeedDegInSec, double processDeltaTime)
     {
-        RotateToTarget(node, node.Position.AngleToPoint(target.Position), rotationSpeedDegInSec, processDeltaTime);
+        RotateToTarget(node, node.GlobalPosition.AngleToPoint(target.GlobalPosition), rotationSpeedDegInSec, processDeltaTime);
     }
 
 }
