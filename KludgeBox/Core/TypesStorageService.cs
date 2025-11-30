@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using KludgeBox.DI.Requests.LoggerInjection;
+﻿using KludgeBox.DI.Requests.LoggerInjection;
 using Serilog;
 
 namespace KludgeBox.Core;

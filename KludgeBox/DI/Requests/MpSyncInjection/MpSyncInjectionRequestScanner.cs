@@ -1,5 +1,4 @@
-﻿using KludgeBox.DI.Requests.LoggerInjection;
-using KludgeBox.Godot.Nodes.MpSync;
+﻿using KludgeBox.Godot.Nodes.MpSync;
 using KludgeBox.Reflection.Access;
 
 namespace KludgeBox.DI.Requests.MpSyncInjection;
