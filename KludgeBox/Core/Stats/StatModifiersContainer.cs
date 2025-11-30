@@ -11,8 +11,6 @@ public class StatModifiersContainer<TStat>
     public void AddStatModifier(StatModifier<TStat> statModifier)
     {
         AddTaskToInvalidateCache(statModifier);
-        statModifier.PropertyChanged += (stat, _) => AddTaskToInvalidateCache((StatModifier<TStat>) stat);
-        
         _statsModifiers.Add(statModifier);
     }
     

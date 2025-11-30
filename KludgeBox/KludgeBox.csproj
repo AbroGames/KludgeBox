@@ -75,7 +75,6 @@
         <PackageReference Include="Serilog" Version="4.3.0" />
         <PackageReference Include="Serilog.Sinks.Async" Version="2.1.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
 
         <!-- Включение SourceLink для упрощения отладки либы конечным пользователем -->
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>

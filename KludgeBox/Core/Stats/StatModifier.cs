@@ -1,20 +1,18 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿namespace KludgeBox.Core.Stats;
 
-namespace KludgeBox.Core.Stats;
-
-public partial class StatModifier<TStat> : ObservableObject
+public class StatModifier<TStat>
 {
     public enum ModifierType { Additive, Multiplicative }
         
     public readonly TStat Stat;
     public readonly ModifierType Type;
-    [ObservableProperty] private double _value;
+    public readonly double Value;
 
     public StatModifier(TStat stat, ModifierType type, double value)
     {
         Stat = stat;
         Type = type;
-        _value = value;
+        Value = value;
     }
 
     public static StatModifier<TStat> CreateAdditive(TStat stat, double value)
