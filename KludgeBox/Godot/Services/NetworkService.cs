@@ -14,11 +14,27 @@ public abstract class NetworkService
         }
     }
     
+    public void DoNotClient(Action notClientAction)
+    {
+        if (!IsClient())
+        {
+            notClientAction();
+        }
+    }
+    
     public void DoServer(Action serverAction)
     {
         if (IsServer())
         {
             serverAction();
+        }
+    }
+    
+    public void DoNotServer(Action notServerAction)
+    {
+        if (!IsServer())
+        {
+            notServerAction();
         }
     }
     
@@ -32,5 +48,17 @@ public abstract class NetworkService
     {
         DoServer(serverAction);
         DoClient(clientAction);
+    }
+    
+    public void DoServerNotServer(Action serverAction, Action notServerAction)
+    {
+        DoServer(serverAction);
+        DoNotServer(notServerAction);
+    }
+    
+    public void DoClientNotClient(Action clientAction, Action notClientAction)
+    {
+        DoClient(clientAction);
+        DoNotClient(notClientAction);
     }
 }
