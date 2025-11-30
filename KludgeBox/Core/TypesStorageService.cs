@@ -16,19 +16,18 @@ public class TypesStorageService
         Di.Process(this);
     }
 
-    public void AddTypes(Assembly assembly)
+    public void AddTypes(List<Type> types)
     {
         // Find and sort all types (except abstract and interface)
-        List<Type> types = assembly
-            .GetTypes()
+        List<Type> filteredTypes = types
             .Where(t => !t.IsInterface)
             .Where(t => !t.IsAbstract)
             .OrderBy(t => t.FullName)
             .ToList();
 
-        for (int i = 0; i < types.Count; i++)
+        for (int i = 0; i < filteredTypes.Count; i++)
         {
-            Type type = types[i];
+            Type type = filteredTypes[i];
             
             _typeById[i] = type;
             _idByType[type] = i;
