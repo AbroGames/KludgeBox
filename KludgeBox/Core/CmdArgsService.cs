@@ -28,7 +28,7 @@ public class CmdArgsService
     {
         if (!CmdArgs.IsEmpty())
         {
-            _log.Information("Cmd args: " + CmdArgs.Join());
+            _log.Information("Cmd args: {args}", CmdArgs.Join());
         }
         else
         {
