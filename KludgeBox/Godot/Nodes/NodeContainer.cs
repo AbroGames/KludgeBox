@@ -3,8 +3,10 @@ using Godot;
 namespace KludgeBox.Godot.Nodes;
 
 /// <summary>
-/// This script must be added to node in Godot editor
-/// This script can be added to node with any type, not only type "Node"
+/// <b>To use this, you must inherit this class.</b><br/>
+/// <br/>
+/// <b>This script must be added to node in Godot editor.</b><br/>
+/// This script can be added to node with any type, not only type "Node".
 /// </summary>
 public partial class NodeContainer : Node
 {

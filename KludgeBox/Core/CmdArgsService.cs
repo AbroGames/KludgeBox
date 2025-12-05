@@ -1,6 +1,5 @@
 ﻿using Godot;
 using KludgeBox.DI.Requests.LoggerInjection;
-using KludgeBox.Logging;
 using Serilog;
 
 namespace KludgeBox.Core;
@@ -10,9 +9,9 @@ public class CmdArgsService
 
     protected readonly string[] CmdArgs = OS.GetCmdlineArgs();
     
-    private bool _logIfEmpty; // Write message to log, then param doesn't exist in args
-    private bool _logIfException; // Write message to log, then we catch Exception while find/parsing param
-    private bool _logIfSuccessful; // Write message to log, then param successfully found
+    private bool _logIfEmpty; // Write message to log, if param doesn't exist in args
+    private bool _logIfException; // Write message to log, if we catch Exception while find/parsing param
+    private bool _logIfSuccessful; // Write message to log, if param successfully found
     
     [Logger] private ILogger _log;
 
@@ -29,7 +28,7 @@ public class CmdArgsService
     {
         if (!CmdArgs.IsEmpty())
         {
-            _log.Information("Cmd args: " + CmdArgs.Join());
+            _log.Information("Cmd args: {args}", CmdArgs.Join());
         }
         else
         {

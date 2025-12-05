@@ -9,8 +9,8 @@ public abstract partial class AbstractStorage : Node
     public IReadOnlyList<PackedScene> GetScenesList() => _scenesList.AsReadOnly();
     public IReadOnlyDictionary<string, PackedScene> GetScenesDictionary() => _scenes.AsReadOnly();
     
-    private Dictionary<string, PackedScene> _scenes = new();
-    private List<PackedScene> _scenesList = new();
+    private readonly Dictionary<string, PackedScene> _scenes = new();
+    private readonly List<PackedScene> _scenesList = new();
     
     /// <summary>
     /// Called in sealed <see cref="AbstractStorage._Ready()"/> before scanning for scenes.

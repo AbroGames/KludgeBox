@@ -6,22 +6,19 @@ public abstract class Cooldown
     public double Duration { get; } = 0;
 	
     //Gets elapsed time in seconds
-    public double ElapsedTime => Duration - _timeLeft;
+    public double ElapsedTime => Duration - TimeLeft;
     //Gets time left in seconds
-    public double TimeLeft => _timeLeft;
+    public double TimeLeft { get; protected set; } = 0;
+    public bool IsActivated { get; protected set; } = false;
 
     //Gets the fraction of the cooldown completed, ranging from 0 to 1.
     public double FractionElapsedTime => ElapsedTime / Duration;
 	
     public event Action ActionWhenReady;
-	
-    protected double _timeLeft = 0;
-    protected bool _isActivated = false;
-    
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Cooldown"/> class with the specified duration.
-    /// </summary>
+
     /// <param name="duration">The duration of the cooldown in seconds.</param>
+    /// <param name="isActivated">If false, the cooldown starts only after manually calling <c>Start()</c>.</param>
+    /// <param name="actionWhenReady">Invoked when the counter completes.</param>
     public Cooldown(double duration, bool isActivated = true, Action actionWhenReady = null) 
     {
 	    if (duration <= 0)
@@ -30,8 +27,8 @@ public abstract class Cooldown
 	    }
 		
 	    Duration = duration;
-	    _timeLeft = duration;
-	    _isActivated = isActivated;
+	    TimeLeft = duration;
+	    IsActivated = isActivated;
 	    ActionWhenReady = actionWhenReady;
     }
 

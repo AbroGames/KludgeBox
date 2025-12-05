@@ -1,5 +1,4 @@
-﻿using KludgeBox.Core;
-using KludgeBox.Core.Random;
+﻿using KludgeBox.Core.Random;
 using KludgeBox.DI;
 
 namespace KludgeBox;

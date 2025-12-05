@@ -2,6 +2,9 @@
 
 namespace KludgeBox.Godot.Nodes.MpSync;
 
+/// <summary>
+/// See <see cref="AttributeMultiplayerSynchronizer"/>.
+/// </summary>
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
 public sealed class SyncAttribute : Attribute
 {

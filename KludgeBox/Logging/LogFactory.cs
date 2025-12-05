@@ -4,6 +4,8 @@ namespace KludgeBox.Logging;
 
 public class LogFactory
 {
+    public static bool GodotPushEnable { get; set; } = false;
+    
     private static Dictionary<Type, ILogger> _loggersByType = new();
     private static Dictionary<string, ILogger> _loggersByName = new();
 
@@ -72,7 +74,9 @@ public class LogFactory
         var config = new LoggerConfiguration()
             .Enrich.With<ShortSourceContextEnricher>()
             .WriteTo.Async(wt => wt.GodotRich(
-                outputTemplate: DefaultTemplate
+                outputTemplate: DefaultTemplate,
+                null,
+                () => GodotPushEnable
             ));
         
         return config;

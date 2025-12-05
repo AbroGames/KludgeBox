@@ -1,7 +1,4 @@
-﻿using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
-using Godot;
+﻿using Godot;
 using Godot.Collections;
 
 namespace KludgeBox.Godot.Extensions;
@@ -12,9 +9,8 @@ public static class NodeTreeExtensions
     private static ulong _nodeCounter;
     
     /// <summary>
-    /// Shortcut for GodotObject.IsInstanceValid(object)
+    /// Shortcut for <c>GodotObject.IsInstanceValid(object)</c>.
     /// </summary>
-    /// <param name="gdObj"></param>
     /// <returns></returns>
     public static bool IsValid(this GodotObject gdObj)
     {
@@ -51,8 +47,8 @@ public static class NodeTreeExtensions
     }
     
     /// <summary>
-    /// Extension method that reparents the given node to a new parent node.
-    /// If the current parent node is valid, the node is reparented to the new parent node using Reparent().
+    /// Extension method that reparents the given node to a new parent node.<br/>
+    /// If the current parent node is valid, the node is reparented to the new parent node using Reparent().<br/>
     /// If the current parent node is invalid but the new parent node is valid, the node is added as a child to the new parent.
     /// </summary>
     /// <param name="node">The node to be reparented.</param>
@@ -117,13 +113,13 @@ public static class NodeTreeExtensions
 
     
     /// <summary>
-    /// Retrieves or creates a child of the specified type and adds it as a child to the calling Node.
+    /// Retrieves or creates a child of the specified type and adds it as a child to the calling Node.<br/>
     /// If a child of the specified type already exists, it is returned; otherwise, a new instance is created and added.
     /// </summary>
     /// <typeparam name="T">The type of the child Node to retrieve or create.</typeparam>
     /// <param name="node">The Node to which the child will be added.</param>
     /// <remarks>
-    /// This method is useful for ensuring that a specific type of child Node always exists as a direct child of the calling Node.
+    /// This method is useful for ensuring that a specific type of child Node always exists as a direct child of the calling Node.<br/>
     /// If a child of the specified type is already present, it is returned; otherwise, a new instance is created, added, and returned.
     /// </remarks>
     public static T FindOrAddChild<T>(this Node node) where T : Node, new()
@@ -168,9 +164,10 @@ public static class NodeTreeExtensions
     }
 
     /// <summary>
-    /// Этот метод может быть полезен, когда при удалении одного узла нужно добавить на его место новый. В этой ситуации
-    /// может случиться так, что узел удаляется потому, что его родительский узел тоже удаляется. В этот момент попытка добавить на место узла другой
-    /// вызовет ошибку. Этот метод подождет до конца кадра и только после этого ПОПЫТАЕТСЯ добавить узел.
+    /// This method is useful when you need to replace a node that is being removed.<br/>
+    /// In some cases, a node is removed because its parent is also being removed.<br/>
+    /// Attempting to add a replacement immediately would cause an error.<br/>
+    /// This method waits until the end of the frame and only then attempts to add the node.
     /// </summary>
     public static void TryAddChildDeferred(this Node parent, Node child, Action callback = null)
     {
@@ -182,64 +179,5 @@ public static class NodeTreeExtensions
                 callback?.Invoke();
             }
         }).CallDeferred();
-    }
-    
-    /// <summary>
-    /// Get full path for all children of this node
-    /// </summary>
-    public static string GetFullTree(this Node node)
-    {
-        StringBuilder sb = new();
-        sb.AppendLine(); 
-        sb.Append(node.GetPath());
-        foreach (var child in node.GetChildren()) 
-        {
-            sb.Append(child.GetFullTree());
-        }
-        return sb.ToString();
-    }
-    
-    /// <summary>
-    /// Get hash of all children of this node
-    /// Can be used for compare Client/Server trees in debug
-    /// </summary>
-    public static string GetTreeHash(this Node node)
-    {
-        string inputString = node.GetFullTree();
-        byte[] inputBytes = Encoding.UTF8.GetBytes(inputString);
-        byte[] hashBytes = MD5.HashData(inputBytes);
-
-        StringBuilder sb = new StringBuilder();
-        foreach (byte b in hashBytes)
-        {
-            sb.Append(b.ToString("x2"));
-        }
-
-        return sb.ToString();
-    }
-    
-    /// <summary>
-    /// Get data from each field and property with attribute [Export]
-    /// </summary>
-    public static string GetExportMembersInfo(this Node node)
-    {
-        StringBuilder stringBuilder = new();
-        Type type = node.GetType();
-        foreach (PropertyInfo property in type.GetProperties())
-        {
-            if (!Attribute.IsDefined(property, typeof(ExportAttribute))) continue;
-            
-            stringBuilder.AppendLine();
-            stringBuilder.Append(property.Name + ": " + property.GetValue(node));
-        }
-        foreach (FieldInfo field in type.GetFields())
-        {
-            if (!Attribute.IsDefined(field, typeof(ExportAttribute))) continue;
-            
-            stringBuilder.AppendLine();
-            stringBuilder.Append(field.Name + ": " + field.GetValue(node));
-        }
-        
-        return stringBuilder.ToString();
     }
 }
