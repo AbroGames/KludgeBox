@@ -10,7 +10,7 @@ namespace KludgeBox.Godot.Services;
 public class NodeTreeService
 {
     
-    [Logger] ILogger _log;
+    [Logger] private ILogger _log;
 
     public NodeTreeService()
     {
