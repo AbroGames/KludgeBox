@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Godot;
 using KludgeBox.DI.Requests.LoggerInjection;
+using KludgeBox.Reflection.Access;
 using Serilog;
 
 namespace KludgeBox.Godot.Nodes.MpSync;
@@ -40,7 +41,7 @@ public partial class AttributeMultiplayerSynchronizer : MultiplayerSynchronizer
         
         // Add all [Sync] properties and fields to ReplicationConfig.Property
         SetReplicationConfig(new SceneReplicationConfig());
-        List<MemberInfo> syncedMembers = GetSyncedMembers(observableNode);
+        List<IMemberAccessor> syncedMembers = GetSyncedMembers(observableNode);
         syncedMembers.ForEach(AddMemberToReplicationConfig);
     }
 
@@ -49,29 +50,24 @@ public partial class AttributeMultiplayerSynchronizer : MultiplayerSynchronizer
         SetRootPath(GetPathTo(_observableNode));
     }
 
-    private List<MemberInfo> GetSyncedMembers(Node observableNode)
+    private List<IMemberAccessor> GetSyncedMembers(Node observableNode)
     {
         Type type = observableNode.GetType();
-        List<MemberInfo> result = new();
+        List<IMemberAccessor> result = new();
         
         
-        List<MemberInfo> members = new();
-        BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-        members.AddRange(type.GetProperties(bindingFlags));
-        members.AddRange(type.GetFields(bindingFlags));
-
-        foreach (MemberInfo member in members)
+        IReadOnlyList<IMemberAccessor> members = KludgeBoxServices.MembersScanner.ScanMembers(type);
+        foreach (var member in members)
         {
-            
-            if (Attribute.IsDefined(member, typeof(SyncAttribute)))
+            if (member.HasAttribute<SyncAttribute>())
             {
-                if (!Attribute.IsDefined(member, typeof(ExportAttribute)))
+                if (member.HasAttribute<ExportAttribute>())
                 {
-                    _log.Error($"{member.MemberType} '{member.Name}' in type '{observableNode.GetType()}' has Sync attribute, but doesn't have Export attribute");
+                    result.Add(member);
                 }
                 else
                 {
-                    result.Add(member);
+                    _log.Error($"{member.Member.MemberType} '{member.Member.Name}' in type '{observableNode.GetType()}' has Sync attribute, but doesn't have Export attribute");
                 }
             }
         }
@@ -79,18 +75,17 @@ public partial class AttributeMultiplayerSynchronizer : MultiplayerSynchronizer
         return result;
     }
 
-    private void AddMemberToReplicationConfig(MemberInfo member)
+    private void AddMemberToReplicationConfig(IMemberAccessor member)
     {
-        SyncAttribute syncAttr = member.GetCustomAttribute<SyncAttribute>();
-        if (syncAttr == null)
+        if (!member.TryGetAttribute<SyncAttribute>(out var syncAttr))
         {
-            _log.Error($"Can't add {member.MemberType} '{member.Name}' to ReplicationConfig of '{GetPath()}' because it don't have Sync attribute");
+            _log.Error($"Can't add {member.Member.MemberType} '{member.Member.Name}' to ReplicationConfig of '{GetPath()}' because it don't have Sync attribute");
             return;
         }
         
         string pathToNode = ".";
         string nodeAndMemberSeparator = ":";
-        string memberName = member.Name;
+        string memberName = member.Member.Name;
         string fullPropertyName = pathToNode + nodeAndMemberSeparator + memberName;
         
         GetReplicationConfig().AddProperty(fullPropertyName);

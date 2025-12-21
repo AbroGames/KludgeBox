@@ -4,8 +4,22 @@ namespace KludgeBox.Reflection.Access;
 
 public class MembersScanner
 {
-    public List<IMemberAccessor> ScanMembers(Type type)
+    private Dictionary<Type, List<IMemberAccessor>> _memberAccessorsCache = new();
+    
+    /// <summary>
+    /// Scans members of the type and returns them as <see cref="IMemberAccessor"/>. Also caches scanning results.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    /// TODO: This potentially may result in uncontrollable cache growth. Probably need to make cache as a separate service, or add more control over caching.
+    /// TODO: Also, 'ScanMembers' name is kinda misleading.
+    public IReadOnlyList<IMemberAccessor> ScanMembers(Type type)
     {
+        if (_memberAccessorsCache.TryGetValue(type, out var cachedAccessors))
+        {
+            return cachedAccessors;
+        }
+        
         var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
         var fields = type.GetFields(flags);
         var properties = type.GetProperties(flags).Where(p => p.CanWrite);
@@ -20,6 +34,8 @@ public class MembersScanner
         var accessors = members
             .Select(IMemberAccessor (member) => new MemberAccessor(member))
             .ToList();
+        
+        _memberAccessorsCache[type] = accessors;
         
         return accessors;
     }
