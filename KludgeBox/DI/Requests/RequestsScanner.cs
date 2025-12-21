@@ -4,6 +4,7 @@ using KludgeBox.DI.Requests.LoggerInjection;
 using KludgeBox.DI.Requests.MpSyncInjection;
 using KludgeBox.DI.Requests.NotNullCheck;
 using KludgeBox.DI.Requests.ParentInjection;
+using KludgeBox.DI.Requests.SceneServiceInjection;
 using KludgeBox.Reflection.Access;
 
 namespace KludgeBox.DI.Requests;
@@ -21,6 +22,7 @@ public class RequestsScanner
     {
         var scanner = new RequestsScanner();
         scanner.RegisterRequestScanner(new LoggerInjectionRequestScanner());
+        scanner.RegisterRequestScanner(new SceneServiceInjectionRequestScanner());
         scanner.RegisterRequestScanner(new DependencyCreationRequestScanner());
         scanner.RegisterRequestScanner(new ChildInjectionRequestScanner());
         scanner.RegisterRequestScanner(new ParentInjectionRequestScanner());
