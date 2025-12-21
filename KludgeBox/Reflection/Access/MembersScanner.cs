@@ -4,8 +4,15 @@ namespace KludgeBox.Reflection.Access;
 
 public class MembersScanner
 {
-    public List<IMemberAccessor> ScanMembers(Type type)
+    private Dictionary<Type, List<IMemberAccessor>> _memberAccessorsCache = new();
+    
+    public IReadOnlyList<IMemberAccessor> ScanMembers(Type type)
     {
+        if (_memberAccessorsCache.TryGetValue(type, out var cachedAccessors))
+        {
+            return cachedAccessors;
+        }
+        
         var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
         var fields = type.GetFields(flags);
         var properties = type.GetProperties(flags).Where(p => p.CanWrite);
@@ -20,6 +27,8 @@ public class MembersScanner
         var accessors = members
             .Select(IMemberAccessor (member) => new MemberAccessor(member))
             .ToList();
+        
+        _memberAccessorsCache[type] = accessors;
         
         return accessors;
     }
