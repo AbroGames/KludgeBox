@@ -6,6 +6,13 @@ public class MembersScanner
 {
     private Dictionary<Type, List<IMemberAccessor>> _memberAccessorsCache = new();
     
+    /// <summary>
+    /// Scans members of the type and returns them as <see cref="IMemberAccessor"/>. Also caches scanning results.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    /// TODO: This potentially may result in uncontrollable cache growth. Probably need to make cache as a separate service, or add more control over caching.
+    /// TODO: Also, 'ScanMembers' name is kinda misleading.
     public IReadOnlyList<IMemberAccessor> ScanMembers(Type type)
     {
         if (_memberAccessorsCache.TryGetValue(type, out var cachedAccessors))
