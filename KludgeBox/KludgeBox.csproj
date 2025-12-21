@@ -8,7 +8,7 @@
         Minor - добавление новх фич, запланированое плавное устаревание API
         Patch - небольшие фиксы и незначительный функционал
          -->
-        <GeneralVersion>2.2.1</GeneralVersion>
+        <GeneralVersion>2.3.0</GeneralVersion>
 
         <!--
         Пререлизный тег, на случай, когда надо зарелизить что-то, что не должно попасть в релиз
@@ -40,7 +40,7 @@
     
     <PropertyGroup>
         <!-- Базовые настройки проекта -->
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         
         <!-- Метаданные проекта -->
