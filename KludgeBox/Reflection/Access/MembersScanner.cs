@@ -21,8 +21,8 @@ public class MembersScanner
         }
         
         var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
-        var fields = type.GetFields(flags);
-        var properties = type.GetProperties(flags).Where(p => p.CanWrite);
+        var fields = type.GetFields(flags).Where(field => !field.IsPrivate);
+        var properties = type.GetProperties(flags).Where(p => p.CanWrite).Where(property => !IsPrivateProperty(property));
         
         var privateMembers = GetPrivateMembers(type);
         
