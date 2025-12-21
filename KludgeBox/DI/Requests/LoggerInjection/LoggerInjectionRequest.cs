@@ -15,7 +15,7 @@ public class LoggerInjectionRequest : IProcessingRequest
 
     public void ProcessOnInstance(object instance)
     {
-        var logger = LogFactory.GetForStatic(instance.GetType());
+        var logger = LogFactory.GetForStatic(_memberAccessor.Member.DeclaringType);
         _memberAccessor.SetValue(instance, logger);
     }
 }
