@@ -1,4 +1,6 @@
-﻿namespace KludgeBox.Testing.Asserting;
+﻿using System;
+
+namespace KludgeBox.Testing.Asserting;
 
 public abstract class AssertException : Exception
 {

@@ -1,4 +1,6 @@
-﻿namespace KludgeBox.Testing;
+﻿using System;
+
+namespace KludgeBox.Testing;
 
 /// <summary>
 /// Attribute that should be used to mark test methods.

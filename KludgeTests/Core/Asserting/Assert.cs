@@ -1,4 +1,6 @@
-﻿namespace KludgeBox.Testing.Asserting;
+﻿using System;
+
+namespace KludgeBox.Testing.Asserting;
 
 /// <summary>
 /// A static class containing assertion methods for unit testing.
