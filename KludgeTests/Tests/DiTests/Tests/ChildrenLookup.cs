@@ -4,9 +4,10 @@ using static KludgeTests.Tests.DiTests.LocalServices;
 
 namespace KludgeTests.Tests.DiTests;
 
+[TestGroup("DI Tests")]
 public partial class ChildrenLookup : TestNode
 {
-    public override string TestName => "DI Tests: children injection";
+    public override string TestName => "Children injection";
     
     [Test]
     public void LookupAndInjectAllChildren()

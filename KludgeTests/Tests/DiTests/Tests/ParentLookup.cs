@@ -7,9 +7,10 @@ using static KludgeTests.Tests.DiTests.LocalServices;
 
 namespace KludgeTests.Tests.DiTests;
 
+[TestGroup("DI Tests")]
 public partial class ParentLookup : TestNode
 {
-    public override string TestName => "DI Tests: parent injection";
+    public override string TestName => "Parent injection";
 
     [Test]
     public void InjectParentToTheChild()

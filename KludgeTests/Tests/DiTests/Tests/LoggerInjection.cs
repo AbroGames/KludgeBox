@@ -9,9 +9,10 @@ using static KludgeTests.Tests.DiTests.LocalServices;
 
 namespace KludgeTests.Tests.DiTests;
 
+[TestGroup("DI Tests")]
 public partial class LoggerInjection : TestNode
 {
-    public override string TestName => "DI Tests: logger injection";
+    public override string TestName => "Logger injection";
     
     [Test]
     public void InjectLoggerToNode()

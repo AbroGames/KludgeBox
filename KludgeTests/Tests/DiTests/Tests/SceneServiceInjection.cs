@@ -7,9 +7,10 @@ using static KludgeTests.Tests.DiTests.LocalServices;
 
 namespace KludgeTests.Tests.DiTests;
 
+[TestGroup("DI Tests")]
 public partial class SceneServiceInjection : TestNode
 {
-    public override string TestName => "DI Tests: scene services injection";
+    public override string TestName => "Scene services injection";
 
     [Test]
     public void InjectSimpleService()
