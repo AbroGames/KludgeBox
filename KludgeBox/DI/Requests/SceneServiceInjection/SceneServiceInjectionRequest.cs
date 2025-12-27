@@ -12,19 +12,18 @@ public class SceneServiceInjectionRequest : IProcessingRequest
     public SceneServiceInjectionRequest(IMemberAccessor memberAccessor, Type serviceType)
     {
         _memberAccessor = memberAccessor;
-        _serviceType = serviceType;
+        _serviceType = serviceType ?? _memberAccessor.ValueType;
     }
 
 
     public void ProcessOnInstance(object instance)
     {
         var nodeInstance = (Node)instance; // All checks are done in scanner
-        var serviceType = _serviceType ?? _memberAccessor.ValueType;
-        var service = GetService(serviceType, nodeInstance);
+        var service = GetService(_serviceType, nodeInstance);
         
         if (service is null)
         {
-            throw new InvalidOperationException($"Service of type {serviceType} not found for node {nodeInstance.GetPath()}@{nodeInstance.GetType().Name}.");
+            throw new InvalidOperationException($"Service of type {_serviceType} not found for node {nodeInstance.GetPath()}@{nodeInstance.GetType().Name}.");
         }
         
         _memberAccessor.SetValue(instance, service);
