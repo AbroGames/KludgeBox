@@ -46,7 +46,7 @@ public partial class SceneServiceInjection : TestNode
         }
     }
     
-    internal partial class SomeOtherServiceProviderParent : DiTestTypes.ParentNode,  ISceneServiceProvider
+    internal partial class SomeOtherServiceProviderParent : DiTestTypes.ParentNode,  IServiceProvider
     {
         public object GetService(Type serviceType)
         {
