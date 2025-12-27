@@ -9,6 +9,20 @@ namespace KludgeBox.Testing;
 public sealed class TestAttribute : Attribute;
 
 /// <summary>
+/// Use that on test classes to group them in general contexts
+/// </summary>
+[AttributeUsage(AttributeTargets.Class)]
+public sealed class TestGroupAttribute : Attribute
+{
+    public readonly string ContextName;
+    
+    public TestGroupAttribute(string contextName)
+    {
+        ContextName = contextName;
+    }
+}
+
+/// <summary>
 /// Allows running the same test multiple times with different cases.
 /// One attribute per case.
 /// </summary>

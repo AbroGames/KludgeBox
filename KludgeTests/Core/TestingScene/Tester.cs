@@ -1,12 +1,13 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Godot;
 
 namespace KludgeBox.Testing.TestingScene;
 
 public partial class Tester : Node
 {
-    private List<TestTracker> _trackers = new();
-    private List<TestNode> _rootTestNodes = new();
+    private List<TestContext> _rootContexts = new();
     [Export] private Node _trackersContainer;
     [Export] private Node _totalLabel;
     [Export] private Node _passedLabel;
@@ -22,17 +23,48 @@ public partial class Tester : Node
     {
         GD.Print($"Scanning tests");
         var testNodes = TestsScanner.ScanTestClasses();
-        GD.Print($"Found {testNodes.Count} test instances.");
-        
+        //List<TestContext> rootContexts = new();
+        Dictionary<TestContext, List<TestNode>> rootedTestNodes = new();
         foreach (var testNode in testNodes)
         {
-            var tracker = new TestTracker(testNode.Context);
-            _trackers.Add(tracker);
-            tracker.AddChild(testNode);
-            _rootTestNodes.Add(testNode);
-            _trackersContainer.AddChild(tracker);
+            var ctxAttribute = testNode.GetType().GetCustomAttribute<TestGroupAttribute>();
+            string rootCtxName;
+            if (ctxAttribute is not null)
+            {
+                rootCtxName = ctxAttribute.ContextName;
+            }
+            else
+            {
+                rootCtxName = "No context";
+            }
             
-            ScanContexts(testNode.Context);
+            var rootCtx = _rootContexts.FirstOrDefault(ctx => ctx.Name == rootCtxName);
+            if (rootCtx is null)
+            {
+                rootCtx = new TestContext(rootCtxName, TestResult.NotRan);
+                rootedTestNodes[rootCtx] = new();
+                _rootContexts.Add(rootCtx);
+            }
+            rootCtx.AddChild(testNode.Context);
+            rootedTestNodes[rootCtx].Add(testNode);
+        }
+        
+        
+        GD.Print($"Found {testNodes.Count} test instances.");
+
+        foreach (var rootContext in _rootContexts)
+        {
+            var rootTracker = new TestTracker(rootContext);
+            _trackersContainer.AddChild(rootTracker);
+
+            foreach (var testNode in rootedTestNodes[rootContext])
+            {
+                var tracker = new TestTracker(testNode.Context);
+                tracker.AddChild(testNode);
+                _trackersContainer.AddChild(tracker);
+            
+                ScanContexts(testNode.Context);
+            }
         }
         
         Callable.From(RunTests).CallDeferred();
@@ -46,16 +78,15 @@ public partial class Tester : Node
         foreach (var childContext in testContext.Children)
         {
             var tracker = new TestTracker(childContext);
-            _trackers.Add(tracker);
             _trackersContainer.AddChild(tracker);
         }
     }
 
     private void RunTests()
     {
-        foreach (var testNode in _rootTestNodes)
+        foreach (var rootContext in _rootContexts)
         {
-            testNode.RunTests();
+            rootContext.Run();
         }
     }
     
