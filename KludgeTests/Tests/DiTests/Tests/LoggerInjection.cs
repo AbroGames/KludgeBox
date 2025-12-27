@@ -46,29 +46,30 @@ public partial class LoggerInjection : TestNode
             logger.Information("Test log from TypeWithMultipleLoggers:{member}", member);
         }
     }
-}
-
-internal partial class NodeWithLogger : Node
-{
-    [Logger] public ILogger Logger { get; private set; }
-}
-
-internal class NotNodeWithLogger
-{
-    [Logger] public ILogger Logger { get; private set; }
-}
-
-internal class TypeWithMultipleLoggers
-{
-    [Logger] public ILogger PublicLogger { get; set; }
-    [Logger] private ILogger _privateLogger { get; set; }
-
-    public Dictionary<string, ILogger> GetLoggers()
+    
+    internal partial class NodeWithLogger : Node
     {
-        var dict = new Dictionary<string, ILogger>();
-        dict[nameof(PublicLogger)] = PublicLogger;
-        dict[nameof(_privateLogger)] = _privateLogger;
+        [Logger] public ILogger Logger { get; private set; }
+    }
+
+    internal class NotNodeWithLogger
+    {
+        [Logger] public ILogger Logger { get; private set; }
+    }
+
+    internal class TypeWithMultipleLoggers
+    {
+        [Logger] public ILogger PublicLogger { get; set; }
+        [Logger] private ILogger _privateLogger { get; set; }
+
+        public Dictionary<string, ILogger> GetLoggers()
+        {
+            var dict = new Dictionary<string, ILogger>();
+            dict[nameof(PublicLogger)] = PublicLogger;
+            dict[nameof(_privateLogger)] = _privateLogger;
         
-        return dict;
+            return dict;
+        }
     }
 }
+

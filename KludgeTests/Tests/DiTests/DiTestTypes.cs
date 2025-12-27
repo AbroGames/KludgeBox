@@ -65,9 +65,4 @@ internal partial class DiTestTypes
         [NotNull] private object NonStrictPrivateNullObjectProperty { get; set; }
         [NotNull] private object NonStrictPrivateNullObjectField;
     }
-    
-    public partial class ChildNodeWithParentReference : ChildNode
-    {
-        [Parent] public ParentNode Parent { get; set; }
-    }
 }
