@@ -3,7 +3,7 @@ using Godot;
 using KludgeBox.DI.Requests.SceneServiceInjection;
 using KludgeBox.Testing;
 using KludgeBox.Testing.Asserting;
-using static KludgeTests.Tests.DiTests.LocalServices;
+using static KludgeTests.Tests.LocalServices;
 
 namespace KludgeTests.Tests.DiTests;
 
@@ -34,7 +34,7 @@ public partial class SceneServiceInjection : TestNode
         [SceneService] public SomeOtherService SomeOtherService { get; private set; }
     }
     
-    internal partial class ServiceProviderParent : DiTestTypes.ParentNode,  ISceneServiceProvider
+    internal partial class ServiceProviderParent : DiTestTypes.ParentNode,  IServiceProvider
     {
         public object GetService(Type serviceType)
         {
