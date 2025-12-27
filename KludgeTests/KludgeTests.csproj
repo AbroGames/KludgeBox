@@ -4,9 +4,6 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Tests\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\KludgeBox\KludgeBox.csproj" />
   </ItemGroup>
 </Project>
