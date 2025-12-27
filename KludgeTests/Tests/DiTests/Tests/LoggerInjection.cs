@@ -5,7 +5,7 @@ using KludgeBox.DI.Requests.LoggerInjection;
 using KludgeBox.Testing;
 using KludgeBox.Testing.Asserting;
 using Serilog;
-using static KludgeTests.Tests.DiTests.LocalServices;
+using static KludgeTests.Tests.LocalServices;
 
 namespace KludgeTests.Tests.DiTests;
 
@@ -58,7 +58,7 @@ public partial class LoggerInjection : TestNode
         [Logger] public ILogger Logger { get; private set; }
     }
 
-    internal class TypeWithMultipleLoggers
+    internal class TypeWithMultipleLoggers : NotNodeWithLogger
     {
         [Logger] public ILogger PublicLogger { get; set; }
         [Logger] private ILogger _privateLogger { get; set; }
@@ -68,6 +68,7 @@ public partial class LoggerInjection : TestNode
             var dict = new Dictionary<string, ILogger>();
             dict[nameof(PublicLogger)] = PublicLogger;
             dict[nameof(_privateLogger)] = _privateLogger;
+            dict[nameof(Logger)] = Logger;
         
             return dict;
         }

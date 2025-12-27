@@ -3,7 +3,7 @@ using KludgeBox.DI.Requests.ChildInjection;
 using KludgeBox.DI.Requests.ParentInjection;
 using KludgeBox.Testing;
 using KludgeBox.Testing.Asserting;
-using static KludgeTests.Tests.DiTests.LocalServices;
+using static KludgeTests.Tests.LocalServices;
 
 namespace KludgeTests.Tests.DiTests;
 

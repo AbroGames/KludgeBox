@@ -1,10 +1,14 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
+﻿using System.Reflection;
+using Godot;
+using KludgeBox.Logging;
+using Serilog;
+using Expression = System.Linq.Expressions.Expression;
 
 namespace KludgeBox.Reflection.Access;
 
 public class PropertyAccessor : IMemberAccessor
 {
+	private static ILogger _log = LogFactory.GetForStatic<PropertyAccessor>();
 	public MemberInfo Member => _property;
 	public Type ValueType { get; }
 	public IReadOnlyList<Attribute> Attributes { get; }
@@ -18,6 +22,7 @@ public class PropertyAccessor : IMemberAccessor
 
 	public PropertyAccessor(PropertyInfo property)
 	{
+		_log.Information("Processing property {Property}", property.Name);
 		if (property.GetGetMethod(true) is null)
 			throw new ArgumentException($"Property {property.Name} does not have a getter.");
 

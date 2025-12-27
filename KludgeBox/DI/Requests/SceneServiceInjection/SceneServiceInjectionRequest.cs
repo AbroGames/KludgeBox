@@ -33,11 +33,6 @@ public class SceneServiceInjectionRequest : IProcessingRequest
     {
         object foundService = null;
         
-        if (possibleServiceProvider is ISceneServiceProvider sceneServiceProvider)
-        {
-            foundService = sceneServiceProvider.GetService(serviceType);
-        }
-        
         if (possibleServiceProvider is IServiceProvider serviceProvider)
         {
             foundService = serviceProvider.GetService(serviceType);
