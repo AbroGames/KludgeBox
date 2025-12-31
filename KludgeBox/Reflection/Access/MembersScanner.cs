@@ -22,7 +22,10 @@ public class MembersScanner
         
         var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
         var fields = type.GetFields(flags).Where(field => !field.IsPrivate);
-        var properties = type.GetProperties(flags).Where(p => p.CanWrite).Where(property => !IsPrivateProperty(property));
+        var properties = type.GetProperties(flags)
+            .Where(IsAccessibleProperty)
+            .Where(property => !IsPrivateProperty(property))
+            .Select(AsAccessibleProperty);
         
         var privateMembers = GetPrivateMembers(type);
         
@@ -46,7 +49,9 @@ public class MembersScanner
         var members = new List<MemberInfo>();
         
         var fields = type.GetFields(flags);
-        var properties = type.GetProperties(flags).Where(p => p.CanWrite);
+        var properties = type.GetProperties(flags)
+            .Where(IsAccessibleProperty)
+            .Select(AsAccessibleProperty);
         
         members.AddRange(fields.Where(field => field.IsPrivate));
         members.AddRange(properties.Where(IsPrivateProperty));
@@ -79,5 +84,25 @@ public class MembersScanner
         var isSetterPrivate = setMethod?.IsPrivate ?? true;
         
         return isGetterPrivate && isSetterPrivate;
+    }
+
+    private static bool IsAccessibleProperty(PropertyInfo property)
+    {
+        var sourceProperty = AsAccessibleProperty(property);
+        
+        var getMethod = sourceProperty.GetGetMethod(true);
+        var setMethod = sourceProperty.GetSetMethod(true);
+        
+        var isAccessible = getMethod is not null && setMethod is not null;
+        return isAccessible;
+    }
+
+    private static PropertyInfo AsAccessibleProperty(PropertyInfo property)
+    {
+        var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+        var declaringType = property.DeclaringType;
+        var sourceProperty = declaringType.GetProperty(property.Name, flags);
+        
+        return sourceProperty;
     }
 }

@@ -4,4 +4,5 @@
     <File Path="README.md" />
   </Folder>
   <Project Path="KludgeBox/KludgeBox.csproj" />
+  <Project Path="KludgeTests/KludgeTests.csproj" />
 </Solution>

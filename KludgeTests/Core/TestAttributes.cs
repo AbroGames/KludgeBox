@@ -1,10 +1,26 @@
-﻿namespace KludgeBox.Testing;
+﻿using System;
+
+namespace KludgeBox.Testing;
 
 /// <summary>
 /// Attribute that should be used to mark test methods.
 /// </summary>
 [AttributeUsage(AttributeTargets.Method)]
 public sealed class TestAttribute : Attribute;
+
+/// <summary>
+/// Use that on test classes to group them in general contexts
+/// </summary>
+[AttributeUsage(AttributeTargets.Class)]
+public sealed class TestGroupAttribute : Attribute
+{
+    public readonly string ContextName;
+    
+    public TestGroupAttribute(string contextName)
+    {
+        ContextName = contextName;
+    }
+}
 
 /// <summary>
 /// Allows running the same test multiple times with different cases.
