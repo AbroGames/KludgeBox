@@ -23,19 +23,24 @@ public class PropertyAccessor : IMemberAccessor
 	public PropertyAccessor(PropertyInfo property)
 	{
 		_log.Information("Processing property {Property}", property.Name);
-		if (property.GetGetMethod(true) is null)
+		/*if (property.GetGetMethod(true) is null)
 			throw new ArgumentException($"Property {property.Name} does not have a getter.");
 
 		if (property.GetSetMethod(true) is null)
-			throw new ArgumentException($"Property {property.Name} does not have a setter.");
-
+			throw new ArgumentException($"Property {property.Name} does not have a setter.");*/
+		if (!IsAccessibleProperty(property))
+		{
+			throw new ArgumentException($"Property {property.Name} are not fully accessible (has no setter or getter).");
+		}
+		
 		_property = property;
-		Attributes = property.GetCustomAttributes().ToList();
-		ValueType = property.PropertyType;
+		Attributes = _property.GetCustomAttributes().ToList();
+		ValueType = _property.PropertyType;
 
 		// ⚠ Создание делегатов через Expression (чтобы избежать boxing проблем и ускорить доступ)
-		_getter = CreateGetter(property);
-		_setter = CreateSetter(property);
+		var accessibleProperty = AsAccessibleProperty(property);
+		_getter = CreateGetter(accessibleProperty);
+		_setter = CreateSetter(accessibleProperty);
 	}
 
 	public bool TryGetAttribute(Type attributeType, out Attribute attribute)
@@ -90,6 +95,26 @@ public class PropertyAccessor : IMemberAccessor
 	{
 		// ✅ Использование скомпилированного сеттера
 		_setter(target, value);
+	}
+	
+	private static bool IsAccessibleProperty(PropertyInfo property)
+	{
+		var sourceProperty = AsAccessibleProperty(property);
+        
+		var getMethod = sourceProperty.GetGetMethod(true);
+		var setMethod = sourceProperty.GetSetMethod(true);
+        
+		var isAccessible = getMethod is not null && setMethod is not null;
+		return isAccessible;
+	}
+
+	private static PropertyInfo AsAccessibleProperty(PropertyInfo property)
+	{
+		var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+		var declaringType = property.DeclaringType;
+		var sourceProperty = declaringType.GetProperty(property.Name, flags);
+        
+		return sourceProperty;
 	}
 }
 

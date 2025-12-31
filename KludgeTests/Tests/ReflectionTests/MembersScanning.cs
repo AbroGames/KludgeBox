@@ -64,9 +64,9 @@ public partial class MembersScanning : TestNode
     internal class PartiallyPrivatePropertiesType : PrivateMembersType
     {
         public double PublicGetterPrivateSetterProperty { get; private set; }
-        //public double PrivateGetterPublicSetterProperty { private get; set; }
+        public double PrivateGetterPublicSetterProperty { private get; set; }
         
-        //public double ReadPrivateGetterProperty() => PrivateGetterPublicSetterProperty;
+        public double ReadPrivateGetterProperty() => PrivateGetterPublicSetterProperty;
     }
     
     internal class NonPublicNonPrivateMembersType : PartiallyPrivatePropertiesType
