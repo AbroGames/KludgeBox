@@ -91,10 +91,22 @@ public partial class JsonPersistenceContainer
                 if (EnterNode(label))
                 {
                     value.ExposeData(this);
-                    return;
+                    ExitNode();
                 }
             }
+            return;
         }
+        
+        // Last fix: no type metadata was stored during refs scanning
+        if (State is ContainerState.Saving)
+        {
+            foreach (var (label, value) in _knownReferences)
+            {
+                var refExposable = value;
+                Expose_Deep(ref refExposable, label);
+            }
+            return;
+        } 
         
         if (State is ContainerState.Loading)
         {

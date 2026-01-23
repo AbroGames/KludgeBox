@@ -1,4 +1,6 @@
-﻿namespace Persistence;
+﻿using System.Reflection;
+
+namespace Persistence;
 
 public static class ExposableReflection
 {
@@ -32,8 +34,9 @@ public static class ExposableReflection
 
     public static object GetInstanceOfType(this Type type, object[] ctorArgs = null)
     {
+        // Next bug: this thing can't find the default constructor
         object result = null;
-        result = Activator.CreateInstance(type, ctorArgs);
+        result = Activator.CreateInstance(type, BindingFlags.Public | BindingFlags.NonPublic, ctorArgs);
 
         return result;
     }
