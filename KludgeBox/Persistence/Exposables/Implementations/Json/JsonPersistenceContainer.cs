@@ -61,7 +61,16 @@ public partial class JsonPersistenceContainer : IPersistenceContainer, IPersiste
             throw  new InvalidOperationException($"Attempt to load IExposable while container is not idle ({State})");
         
         InitializeLoadContainer(source);
-        throw new NotImplementedException();
+        State = ContainerState.Loading;
+        TExposable exposable = default;
+        Expose_Deep(ref exposable, RootObjectName, ctorArgs);
+        State = ContainerState.RefsResolving;
+        _currentNode = _refsContainerObject;
+        ResolveReferenceInstances();
+        _currentNode = _rootObject;
+        exposable.ExposeData(this);
+
+        return exposable;
     }
     
     private void InitializeSaveContainer()
@@ -86,7 +95,10 @@ public partial class JsonPersistenceContainer : IPersistenceContainer, IPersiste
         _rootObject = (JsonObject)json[RootObjectName];
         _refsContainerObject = (JsonObject)json[RefsObjectName];
         
-        _currentNode = _rootObject;
+        _currentNode = _mainContainerObject;
+        
+        _knownReferences = new();
+        _refIds = new();
     }
 
     // Переключается на вложенный объект, создавая его при необходимости.

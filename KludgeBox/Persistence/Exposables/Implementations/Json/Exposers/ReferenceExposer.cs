@@ -82,7 +82,7 @@ public partial class JsonPersistenceContainer
         return false;
     }
 
-    private void ResolveLinks()
+    private void ResolveReferenceInstances()
     {
         foreach (var (label, value) in _knownReferences)
         {
