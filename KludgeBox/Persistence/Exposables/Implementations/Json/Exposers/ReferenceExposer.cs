@@ -84,13 +84,30 @@ public partial class JsonPersistenceContainer
 
     private void ResolveReferenceInstances()
     {
-        foreach (var (label, value) in _knownReferences)
+        if (State is ContainerState.ScanReferences)
         {
-            if (EnterNode(label))
+            foreach (var (label, value) in _knownReferences)
             {
-                value.ExposeData(this);
-                return;
+                if (EnterNode(label))
+                {
+                    value.ExposeData(this);
+                    return;
+                }
+            }
+        }
+        
+        if (State is ContainerState.Loading)
+        {
+            foreach (var (label, node) in _currentNode)
+            {
+                if (EnterNode(label))
+                {
+                    var exposable = RestoreCurrentExposable(null);
+                    exposable.ExposeData(this);
+                    ExitNode();
+                }
             }
         }
     }
+
 }

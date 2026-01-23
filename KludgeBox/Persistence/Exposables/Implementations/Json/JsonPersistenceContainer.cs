@@ -42,10 +42,14 @@ public partial class JsonPersistenceContainer : IPersistenceContainer, IPersiste
 
         InitializeSaveContainer();
         State = ContainerState.ScanReferences;
-        root.ExposeData(this);
+        Expose_Deep(ref root, RootObjectName);
+        //root.ExposeData(this);
         
         State = ContainerState.Saving;
-        root.ExposeData(this);
+        //root.ExposeData(this);
+        Expose_Deep(ref root, RootObjectName);
+        _currentNode = _refsContainerObject;
+        ResolveReferenceInstances();
         
         var stream = new MemoryStream();
         JsonSerializer.Serialize(stream, _mainContainerObject, new JsonSerializerOptions { WriteIndented = true });
@@ -64,9 +68,9 @@ public partial class JsonPersistenceContainer : IPersistenceContainer, IPersiste
         State = ContainerState.Loading;
         TExposable exposable = default;
         Expose_Deep(ref exposable, RootObjectName, ctorArgs);
-        State = ContainerState.RefsResolving;
         _currentNode = _refsContainerObject;
         ResolveReferenceInstances();
+        State = ContainerState.RefsResolving;
         _currentNode = _rootObject;
         exposable.ExposeData(this);
 
@@ -81,7 +85,7 @@ public partial class JsonPersistenceContainer : IPersistenceContainer, IPersiste
         
         _mainContainerObject.Add(RootObjectName, _rootObject);
         _mainContainerObject.Add(RefsObjectName, _refsContainerObject);
-        _currentNode = _rootObject;
+        _currentNode = _mainContainerObject;
         
         _knownReferences = new();
         _refIds = new();

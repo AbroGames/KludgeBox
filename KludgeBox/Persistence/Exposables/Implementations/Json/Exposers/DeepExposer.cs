@@ -5,6 +5,16 @@ public partial class JsonPersistenceContainer
     
     public void Expose_Deep<TValue>(ref TValue value, string label, object[] ctorArgs = null) where TValue : class, IExposable
     {
+        if (State is ContainerState.ScanReferences)
+        {
+            if (value is null)
+            {
+                return;
+            }
+            
+            value.ExposeData(this);
+        }
+        
         if (State is ContainerState.Saving)
         {
             if (value is null)
