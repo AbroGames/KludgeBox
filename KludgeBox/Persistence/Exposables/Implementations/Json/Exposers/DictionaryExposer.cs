@@ -68,8 +68,17 @@ public partial class JsonPersistenceContainer
 
         if (State is ContainerState.RefsResolving)
         {
-            if (dictionary is null)
-                return;
+            if (exposeKeyAs is not ExposeAs.Reference)
+            {
+                if (dictionary is null)
+                    return;
+            }
+            else
+            {
+                if (dictionary is null)
+                    dictionary = new Dictionary<TKey, TValue>();
+            }
+            
             if (EnterNode(label))
             {
                 var (keys, values) = SplitToLists(dictionary);

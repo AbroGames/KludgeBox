@@ -57,13 +57,18 @@ public partial class JsonPersistenceContainer
             
             var array = _currentNode[label] as JsonArray;
             list = new List<TValue>(array.Count);
-            if (exposeValueAs is not ExposeAs.Reference)
-            {
+            
                 foreach (var item in array)
                 {
-                    ReadElementToList(item, exposeValueAs, list, ctorArgs);
+                    if (exposeValueAs is not ExposeAs.Reference)
+                    {
+                        ReadElementToList(item, exposeValueAs, list, ctorArgs);
+                    }
+                    else
+                    {
+                        list.Add((TValue)typeof(TValue).GetInstanceOfType(ctorArgs));
+                    }
                 }
-            }
             
             return;
         }
@@ -77,6 +82,7 @@ public partial class JsonPersistenceContainer
             
             if (exposeValueAs is ExposeAs.Reference)
             {
+                list = new();
                 foreach (var item in array)
                 {
                     if (item is JsonObject jsonObject)

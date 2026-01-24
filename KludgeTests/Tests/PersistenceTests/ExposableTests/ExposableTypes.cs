@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Persistence;
 
@@ -218,13 +219,13 @@ internal class BasicExposableWithDictionaryOfExposables : IExposable
     }
 }
 
-internal class BasicExposableWithListOfRefExposables : IExposable
+internal class ExposableWithListOfRefExposables : IExposable
 {
     public List<ReferenceExposable> Exposables1;
     public List<ReferenceExposable> Exposables2;
-    public BasicExposableWithListOfRefExposables(){}
+    public ExposableWithListOfRefExposables(){}
 
-    public BasicExposableWithListOfRefExposables(List<ReferenceExposable> exposables)
+    public ExposableWithListOfRefExposables(List<ReferenceExposable> exposables)
     {
         Exposables1 = exposables;
         Exposables2 = exposables;
@@ -233,5 +234,23 @@ internal class BasicExposableWithListOfRefExposables : IExposable
     {
         container.Expose_List(ref Exposables1, nameof(Exposables1), ExposeAs.Reference);
         container.Expose_List(ref Exposables2, nameof(Exposables2));
+    }
+}
+
+internal class ExposableWithDictionaryOfExposables : IExposable
+{
+    public Dictionary<ReferenceExposable, ReferenceExposable> Refs2Exposables;
+    public Dictionary<ReferenceExposable, ReferenceExposable> Exposables2Refs;
+    public ExposableWithDictionaryOfExposables(){}
+
+    public ExposableWithDictionaryOfExposables(List<ReferenceExposable> exposables)
+    {
+        Refs2Exposables = exposables.ToDictionary(k => k, v => v);
+        Exposables2Refs = exposables.ToDictionary(k => k, v => v);
+    }
+    public void ExposeData(IPersistenceContainer container)
+    {
+        container.Expose_Dictionary(ref Refs2Exposables, nameof(Refs2Exposables), ExposeAs.Reference, ExposeAs.Deep);
+        container.Expose_Dictionary(ref Exposables2Refs, nameof(Exposables2Refs), ExposeAs.Deep, ExposeAs.Reference);
     }
 }
