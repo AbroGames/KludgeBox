@@ -116,6 +116,9 @@ public partial class JsonPersistenceContainer
                 {
                     var exposable = RestoreCurrentExposable(null);
                     exposable.ExposeData(this);
+                    var refExposable = exposable as IRefExposable;
+                    _knownReferences[label] = refExposable;
+                    _refIds[refExposable] = label;
                     ExitNode();
                 }
             }

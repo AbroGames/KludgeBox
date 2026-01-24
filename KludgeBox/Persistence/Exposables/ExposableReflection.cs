@@ -34,9 +34,19 @@ public static class ExposableReflection
 
     public static object GetInstanceOfType(this Type type, object[] ctorArgs = null)
     {
-        // Next bug: this thing can't find the default constructor
         object result = null;
-        result = Activator.CreateInstance(type, BindingFlags.Public | BindingFlags.NonPublic, ctorArgs);
+        
+        // Next bug: this thing can't find the default constructor
+        //result = Activator.CreateInstance(type, ctorArgs);
+        
+        // Ok, it looks like some serious shit, but now it at least works
+        result = Activator.CreateInstance(
+            type,
+            BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public,
+            binder: null,
+            args: ctorArgs,
+            culture: null
+        );
 
         return result;
     }

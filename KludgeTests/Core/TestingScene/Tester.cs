@@ -86,7 +86,7 @@ public partial class Tester : Node
     {
         foreach (var rootContext in _rootContexts)
         {
-            rootContext.Run();
+            rootContext.Run(throwOnOtherExceptions: false);
         }
     }
     
