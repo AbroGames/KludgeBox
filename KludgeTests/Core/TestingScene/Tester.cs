@@ -8,12 +8,14 @@ namespace KludgeBox.Testing.TestingScene;
 public partial class Tester : Node
 {
     private List<TestContext> _rootContexts = new();
+    private HashSet<TestContext> _finalContexts = new ();
+    
     [Export] private Node _trackersContainer;
-    [Export] private Node _totalLabel;
-    [Export] private Node _passedLabel;
-    [Export] private Node _failedLabel;
-    [Export] private Node _skippedLabel;
-    [Export] private Node _unknownLabel;
+    [Export] private Label _totalLabel;
+    [Export] private Label _passedLabel;
+    [Export] private Label _failedLabel;
+    [Export] private Label _skippedLabel;
+    [Export] private Label _unknownLabel;
     
     
     private static int _checkInterval = 5;
@@ -86,7 +88,29 @@ public partial class Tester : Node
     {
         foreach (var rootContext in _rootContexts)
         {
-            rootContext.Run();
+            rootContext.Run(throwOnOtherExceptions: false);
+            AggregateFinalContexts(rootContext);
+        }
+    }
+    
+    private void AggregateFinalContexts(TestContext root)
+    {
+        var result = new List<TestContext>();
+        if (root.Children.Count == 0)
+        {
+            return;
+        }
+        
+        foreach (var childContext in root.Children)
+        {
+            if (childContext.Children.Count == 0)
+            {
+                _finalContexts.Add(childContext);
+            }
+            else
+            {
+                AggregateFinalContexts(childContext);
+            }
         }
     }
     
@@ -103,6 +127,16 @@ public partial class Tester : Node
 
     private void UpdateUi()
     {
+        int totalTests = _finalContexts.Count;
+        int passedTests = _finalContexts.Count(ctx => ctx.Result is TestResult.Passed);
+        int failedTests = _finalContexts.Count(ctx => ctx.Result is TestResult.Failed or TestResult.Errored);
+        int skippedTests = _finalContexts.Count(ctx => ctx.Result is TestResult.Skipped or TestResult.NotRan);
+        int unknownTests = _finalContexts.Count(ctx => ctx.Result is TestResult.Unknown);
         
+        _totalLabel.Text = $"Finished ({(passedTests + failedTests + skippedTests)}/{totalTests} tests))";
+        _passedLabel.Text = $"Passed ({passedTests} tests)";
+        _failedLabel.Text = $"Failed ({failedTests} tests)";
+        _skippedLabel.Text = $"Skipped ({skippedTests} tests)";
+        _unknownLabel.Text = $"Unknown ({unknownTests} tests)";
     }
 }

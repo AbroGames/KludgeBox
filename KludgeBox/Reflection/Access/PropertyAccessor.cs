@@ -22,7 +22,7 @@ public class PropertyAccessor : IMemberAccessor
 
 	public PropertyAccessor(PropertyInfo property)
 	{
-		_log.Information("Processing property {Property}", property.Name);
+		_log.Debug("Creating accessor for property {Property}", property.Name);
 		/*if (property.GetGetMethod(true) is null)
 			throw new ArgumentException($"Property {property.Name} does not have a getter.");
 
