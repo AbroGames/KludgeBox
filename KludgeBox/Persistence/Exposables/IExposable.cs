@@ -12,11 +12,11 @@ public interface IExposable
     /// <code>
     /// public void ExposeData(IPersistenceContainer container)
     /// {
-    ///     container.ExposeValue(ref hp, );
+    ///     container.ExposeValue(ref hp, "hp");
     /// }
     /// </code>
     /// </summary>
-    /// <param name="container"></param>
+    /// <param name="container">Контейнер сохранения с методами доступа</param>
     void ExposeData(IPersistenceContainer container);
 }
 
@@ -26,5 +26,9 @@ public interface IExposable
 /// </summary>
 public interface IRefExposable : IExposable
 {
+    /// <summary>
+    /// Уникальный Id этого экземпляра. Должен сохранять свое уникальное значение только в процессе сохранения.
+    /// </summary>
+    /// <returns></returns>
     string GetUniqueId();
 }

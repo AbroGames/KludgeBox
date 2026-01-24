@@ -37,7 +37,8 @@ public static class ExposableReflection
         object result = null;
         
         // Next bug: this thing can't find the default constructor
-        //result = Activator.CreateInstance(type, ctorArgs);
+        // TODO: save info about this behavior somewhere
+        // result = Activator.CreateInstance(type, ctorArgs);
         
         // Ok, it looks like some serious shit, but now it at least works
         result = Activator.CreateInstance(

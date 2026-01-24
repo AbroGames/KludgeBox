@@ -7,15 +7,9 @@ public partial class JsonPersistenceContainer
     public void Expose_List<TValue>(ref List<TValue> list, string label, ExposeAs exposeValueAs = ExposeAs.Undefined, object[] ctorArgs = null)
     {
         var elementType = typeof(TValue);
-        if (exposeValueAs is ExposeAs.Undefined)
-        {
-            exposeValueAs = ResolveExpositionType(elementType);
-        }
+        if (exposeValueAs is ExposeAs.Undefined) exposeValueAs = ResolveExpositionType(elementType);
 
-        if (exposeValueAs is ExposeAs.Undefined)
-        {
-            throw new Exception("exposeValueAs is Undefined");
-        }
+        if (exposeValueAs is ExposeAs.Undefined) throw new Exception("exposeValueAs is Undefined");
         
         if (State is ContainerState.ScanReferences)
         {
@@ -75,8 +69,7 @@ public partial class JsonPersistenceContainer
 
         if (State is ContainerState.RefsResolving)
         {
-            if (list is null)
-                return;
+            if (list is null) return;
             
             var array = _currentNode[label] as JsonArray;
             

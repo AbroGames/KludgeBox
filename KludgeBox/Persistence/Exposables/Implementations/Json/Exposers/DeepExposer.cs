@@ -7,10 +7,7 @@ public partial class JsonPersistenceContainer
     {
         if (State is ContainerState.ScanReferences)
         {
-            if (value is null)
-            {
-                return;
-            }
+            if (value is null) return;
             
             value.ExposeData(this);
         }

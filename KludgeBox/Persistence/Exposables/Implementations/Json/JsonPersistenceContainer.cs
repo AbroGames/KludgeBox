@@ -37,8 +37,7 @@ public partial class JsonPersistenceContainer : IPersistenceContainer, IPersiste
     
     public Stream Save(IExposable root)
     {
-        if (State is not ContainerState.Idle)
-            throw  new InvalidOperationException($"Attempt to save IExposable while container is not idle ({State})");
+        if (State is not ContainerState.Idle) throw  new InvalidOperationException($"Attempt to save IExposable while container is not idle ({State})");
 
         InitializeSaveContainer();
         State = ContainerState.ScanReferences;
@@ -61,8 +60,7 @@ public partial class JsonPersistenceContainer : IPersistenceContainer, IPersiste
 
     public TExposable Load<TExposable>(Stream source, object[] ctorArgs = null) where TExposable : class, IExposable
     {
-        if (State is not ContainerState.Idle)
-            throw  new InvalidOperationException($"Attempt to load IExposable while container is not idle ({State})");
+        if (State is not ContainerState.Idle) throw  new InvalidOperationException($"Attempt to load IExposable while container is not idle ({State})");
         
         InitializeLoadContainer(source);
         State = ContainerState.Loading;
@@ -109,14 +107,12 @@ public partial class JsonPersistenceContainer : IPersistenceContainer, IPersiste
     // Возвращает true, если удалось переключиться.
     private bool EnterNode(string name)
     {
-        if (!IsWorking)
-            return false;
+        if (!IsWorking) return false;
 
         if (_currentNode.ContainsKey(name))
         {
             var property = _currentNode[name] as JsonObject;
-            if (property is null)
-                return false;
+            if (property is null) return false;
             
             _currentNode = property;
             return true;
@@ -131,8 +127,7 @@ public partial class JsonPersistenceContainer : IPersistenceContainer, IPersiste
     // Переключается на родительскую ноду
     private void ExitNode()
     {
-        if (!IsWorking)
-            return;
+        if (!IsWorking) return;
 
         _currentNode = (JsonObject) _currentNode.Parent;
     }
@@ -140,8 +135,7 @@ public partial class JsonPersistenceContainer : IPersistenceContainer, IPersiste
 
     private bool IsNull(string label)
     {
-        if (!_currentNode.ContainsKey(label))
-            return true;
+        if (!_currentNode.ContainsKey(label)) return true;
         
         if (EnterNode(label))
         {
@@ -203,20 +197,11 @@ public partial class JsonPersistenceContainer : IPersistenceContainer, IPersiste
 
     private ExposeAs ResolveExpositionType(Type type)
     {
-        if (Serializers.CanSerialize(type))
-        {
-            return ExposeAs.Value;
-        }
+        if (Serializers.CanSerialize(type)) return ExposeAs.Value;
 
-        if (type.IsAssignableTo(typeof(IRefExposable)))
-        {
-            return ExposeAs.Reference;
-        }
+        if (type.IsAssignableTo(typeof(IRefExposable))) return ExposeAs.Reference;
 
-        if (type.IsAssignableTo(typeof(IExposable)))
-        {
-            return ExposeAs.Deep;
-        }
+        if (type.IsAssignableTo(typeof(IExposable))) return ExposeAs.Deep;
 
         return ExposeAs.Undefined;
     }

@@ -9,19 +9,15 @@ public partial class JsonPersistenceContainer
         ExposeAs exposeKeyAs = ExposeAs.Undefined,
         ExposeAs exposeValueAs = ExposeAs.Undefined)
     {
-        if (exposeKeyAs == ExposeAs.Undefined)
-            exposeKeyAs = ResolveExpositionType(typeof(TKey));
+        if (exposeKeyAs == ExposeAs.Undefined) exposeKeyAs = ResolveExpositionType(typeof(TKey));
         
         if (exposeValueAs == ExposeAs.Undefined)
             exposeValueAs = ResolveExpositionType(typeof(TValue));
         
         if (State is ContainerState.ScanReferences)
         {
-            if (dictionary is null)
-            {
-                return;
-            }
-
+            if (dictionary is null) return;
+            
             var (keys, values) = SplitToLists(dictionary);
             Expose_List(ref keys, "ref_keys", exposeKeyAs);
             Expose_List(ref values, "ref_values", exposeValueAs);
@@ -70,13 +66,11 @@ public partial class JsonPersistenceContainer
         {
             if (exposeKeyAs is not ExposeAs.Reference)
             {
-                if (dictionary is null)
-                    return;
+                if (dictionary is null) return;
             }
             else
             {
-                if (dictionary is null)
-                    dictionary = new Dictionary<TKey, TValue>();
+                dictionary ??= dictionary = new Dictionary<TKey, TValue>();
             }
             
             if (EnterNode(label))
@@ -122,54 +116,4 @@ public partial class JsonPersistenceContainer
         
         return  dict;
     }
-    
-    [Obsolete]
-    private void Expose_Dictionary_Overengineered<TKey, TValue>(ref Dictionary<TKey, TValue> dictionary, string label,
-        ExposeAs exposeKeyAs = ExposeAs.Undefined,
-        ExposeAs exposeValueAs = ExposeAs.Undefined)
-    {
-        if (exposeKeyAs == ExposeAs.Undefined)
-            exposeKeyAs = ResolveExpositionType(typeof(TKey));
-        
-        if (exposeValueAs == ExposeAs.Undefined)
-            exposeValueAs = ResolveExpositionType(typeof(TValue));
-        
-        if (State is ContainerState.ScanReferences)
-        {
-            if (dictionary is null)
-            {
-                return;
-            }
-            
-            foreach (var (key, value) in dictionary)
-            {
-                if (key is IRefExposable refKey)
-                {
-                    Expose_ReferenceAnonymous(ref refKey);
-                }
-
-                if (value is IRefExposable refValue)
-                {
-                    Expose_ReferenceAnonymous(ref refValue);
-                }
-            }
-        }
-
-
-        if (State is ContainerState.Saving)
-        {
-            if (dictionary is null)
-            {
-                SaveAsNull(label);
-                return;
-            }
-
-            if (EnterNode(label))
-            {
-                
-                ExitNode();
-            }
-        }
-    }
-    
 }

@@ -10,12 +10,8 @@ public partial class JsonPersistenceContainer
     {
         if (State is ContainerState.ScanReferences)
         {
-            if (value is null)
-                return;
-            
-            if (RegisterReferencable(value))
-                value.ExposeData(this);
-            
+            if (value is null) return;
+            if (RegisterReferencable(value)) value.ExposeData(this);
             return;
         }
 
@@ -37,8 +33,7 @@ public partial class JsonPersistenceContainer
 
         if (State is ContainerState.Loading)
         {
-            if (value is null)
-                return;
+            if (value is null) return;
 
             if (!_refIds.ContainsKey(value))
             {

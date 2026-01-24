@@ -29,7 +29,6 @@ public partial class JsonPersistenceContainer
             }
 
             value = Serializers.Deserialize<TValue>(_currentNode[label]?.ToString());
-            return;
         }
     }
 }
