@@ -105,5 +105,59 @@ public partial class SimpleExposable : TestNode
             Assert.AreEqual(exposable.Exposables[i], restored.Exposables[i]);
         }
     }
+
+    [Test]
+    public void SaveAndLoadDictionaryOfValues()
+    {
+        var exposable = new BasicExposableWithDictionaryOfValues( new (){ 
+            { "one", new(1, 2) },
+            { "two", new(3, 4) },
+            { "three", new(5, 6) }
+        });
+        var container = new JsonPersistenceContainer();
+        var stream = container.Save(exposable);
+        stream.Position = 0;
+        Assert.AreNotEqual(0, stream.Length, "Save stream is empty");
+        
+        container = new JsonPersistenceContainer();
+        var restored = container.Load<BasicExposableWithDictionaryOfValues>(stream);
+        Assert.IsNotNull(container, "Restored IExposable is null");
+        
+        Assert.AreEqual(exposable.Str2Vec2.Count, restored.Str2Vec2.Count, 
+            $"Original pairs count ({exposable.Str2Vec2.Count}) are not equal to restored pairs count {restored.Str2Vec2.Count}");
+
+        foreach (var (key, value) in exposable.Str2Vec2)
+        {
+            Assert.IsTrue(restored.Str2Vec2.TryGetValue(key, out var restoredValue));
+            Assert.AreEqual(value, restoredValue);
+        }
+    }
+    
+    [Test]
+    public void SaveAndLoadDictionaryOfExposables()
+    {
+        var exposable = new BasicExposableWithDictionaryOfExposables( new (){ 
+            { Color.FromHtml("ff0000"), new BasicExposable(1, 2, "3", new Vector2(4,5)) },
+            { Color.FromHtml("00ff00"), new BasicExposable(6, 7, "8", new Vector2(9,10)) },
+            { Color.FromHtml("0000ff"), new BasicExposable(7, 8, "9", new Vector2(11,12)) }
+        });
+        var container = new JsonPersistenceContainer();
+        var stream = container.Save(exposable);
+        stream.Position = 0;
+        Assert.AreNotEqual(0, stream.Length, "Save stream is empty");
+        
+        container = new JsonPersistenceContainer();
+        var restored = container.Load<BasicExposableWithDictionaryOfExposables>(stream);
+        Assert.IsNotNull(container, "Restored IExposable is null");
+        
+        Assert.AreEqual(exposable.Col2Exposable.Count, restored.Col2Exposable.Count, 
+            $"Original pairs count ({exposable.Col2Exposable.Count}) are not equal to restored pairs count {restored.Col2Exposable.Count}");
+
+        foreach (var (key, value) in exposable.Col2Exposable)
+        {
+            Assert.IsTrue(restored.Col2Exposable.TryGetValue(key, out var restoredValue));
+            Assert.AreEqual(value, restoredValue);
+        }
+    }
 }
 

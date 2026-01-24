@@ -50,6 +50,5 @@ public partial class AdvancedExposable : TestNode
         Assert.IsTrue(restored.Reference1 == restored.Reference2, "Restored Reference1 is not the same instance as Reference2");
         restored.Reference1.SomeStringValue = "LOREM IPSUM";
         Assert.AreEqual(restored.Reference1.SomeStringValue, restored.Reference2.SomeStringValue, "Expected to have changed value in both references, but they are different");
-        
     }
 }

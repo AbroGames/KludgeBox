@@ -51,43 +51,6 @@ internal class BasicExposable : IExposable, IEquatable<BasicExposable>
     }
 }
 
-internal class BasicExposableWithListsOfValues : IExposable
-{
-    public List<string> Strings;
-    public List<int> Integers;
-    public List<Vector2> Vectors;
-    public BasicExposableWithListsOfValues(){}
-
-    public BasicExposableWithListsOfValues(List<string> strings, List<int> integers, List<Vector2> vectors)
-    {
-        Strings = strings;
-        Integers = integers;
-        Vectors = vectors;
-    }
-
-    public void ExposeData(IPersistenceContainer container)
-    {
-        container.Expose_List(ref Strings, nameof(Strings));
-        container.Expose_List(ref Integers, nameof(Integers));
-        container.Expose_List(ref Vectors, nameof(Vectors));
-    }
-}
-
-internal class BasicExposableWithListOfExposables : IExposable
-{
-    public List<IExposable> Exposables;
-    public BasicExposableWithListOfExposables(){}
-
-    public BasicExposableWithListOfExposables(List<IExposable> exposables)
-    {
-        Exposables = exposables;
-    }
-
-    public void ExposeData(IPersistenceContainer container)
-    {
-        container.Expose_List(ref Exposables, nameof(Exposables));
-    }
-}
 
 internal class NestedExposable : IExposable, IEquatable<NestedExposable>
 {
@@ -182,5 +145,75 @@ internal class ExposableWithNestedReferences : IExposable
     {
         container.Expose_Reference(ref Reference1, nameof(Reference1));
         container.Expose_Reference(ref Reference2, nameof(Reference2));
+    }
+}
+
+internal class BasicExposableWithListsOfValues : IExposable
+{
+    public List<string> Strings;
+    public List<int> Integers;
+    public List<Vector2> Vectors;
+    public BasicExposableWithListsOfValues(){}
+
+    public BasicExposableWithListsOfValues(List<string> strings, List<int> integers, List<Vector2> vectors)
+    {
+        Strings = strings;
+        Integers = integers;
+        Vectors = vectors;
+    }
+
+    public void ExposeData(IPersistenceContainer container)
+    {
+        container.Expose_List(ref Strings, nameof(Strings));
+        container.Expose_List(ref Integers, nameof(Integers));
+        container.Expose_List(ref Vectors, nameof(Vectors));
+    }
+}
+
+internal class BasicExposableWithListOfExposables : IExposable
+{
+    public List<IExposable> Exposables;
+    public BasicExposableWithListOfExposables(){}
+
+    public BasicExposableWithListOfExposables(List<IExposable> exposables)
+    {
+        Exposables = exposables;
+    }
+
+    public void ExposeData(IPersistenceContainer container)
+    {
+        container.Expose_List(ref Exposables, nameof(Exposables));
+    }
+}
+
+internal class BasicExposableWithDictionaryOfValues : IExposable
+{
+    public Dictionary<string, Vector2> Str2Vec2;
+    public BasicExposableWithDictionaryOfValues(){}
+
+    public BasicExposableWithDictionaryOfValues(Dictionary<string, Vector2> str2Vec2)
+    {
+        Str2Vec2 = str2Vec2;
+    }
+
+    public void ExposeData(IPersistenceContainer container)
+    {
+        container.Expose_Dictionary(ref Str2Vec2, nameof(Str2Vec2));
+    }
+}
+
+internal class BasicExposableWithDictionaryOfExposables : IExposable
+{
+    public Dictionary<Color, IExposable> Col2Exposable;
+    public BasicExposableWithDictionaryOfExposables(){}
+
+    public BasicExposableWithDictionaryOfExposables(Dictionary<Color, IExposable> col2Exposable)
+    {
+        Col2Exposable = col2Exposable;
+    }
+
+    public void ExposeData(IPersistenceContainer container)
+    {
+        container.Expose_Dictionary(ref Col2Exposable, nameof(Col2Exposable));
     }
 }
