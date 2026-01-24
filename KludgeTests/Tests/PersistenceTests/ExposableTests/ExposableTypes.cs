@@ -217,3 +217,21 @@ internal class BasicExposableWithDictionaryOfExposables : IExposable
         container.Expose_Dictionary(ref Col2Exposable, nameof(Col2Exposable));
     }
 }
+
+internal class BasicExposableWithListOfRefExposables : IExposable
+{
+    public List<ReferenceExposable> Exposables1;
+    public List<ReferenceExposable> Exposables2;
+    public BasicExposableWithListOfRefExposables(){}
+
+    public BasicExposableWithListOfRefExposables(List<ReferenceExposable> exposables)
+    {
+        Exposables1 = exposables;
+        Exposables2 = exposables;
+    }
+    public void ExposeData(IPersistenceContainer container)
+    {
+        container.Expose_List(ref Exposables1, nameof(Exposables1), ExposeAs.Reference);
+        container.Expose_List(ref Exposables2, nameof(Exposables2));
+    }
+}
