@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Godot;
 using Persistence;
 
@@ -47,6 +48,44 @@ internal class BasicExposable : IExposable, IEquatable<BasicExposable>
     public override int GetHashCode()
     {
         return HashCode.Combine(SomeIntValue, SomeDoubleValue, SomeStringValue, SomeVector2Value);
+    }
+}
+
+internal class BasicExposableWithListsOfValues : IExposable
+{
+    public List<string> Strings;
+    public List<int> Integers;
+    public List<Vector2> Vectors;
+    public BasicExposableWithListsOfValues(){}
+
+    public BasicExposableWithListsOfValues(List<string> strings, List<int> integers, List<Vector2> vectors)
+    {
+        Strings = strings;
+        Integers = integers;
+        Vectors = vectors;
+    }
+
+    public void ExposeData(IPersistenceContainer container)
+    {
+        container.Expose_List(ref Strings, nameof(Strings));
+        container.Expose_List(ref Integers, nameof(Integers));
+        container.Expose_List(ref Vectors, nameof(Vectors));
+    }
+}
+
+internal class BasicExposableWithListOfExposables : IExposable
+{
+    public List<IExposable> Exposables;
+    public BasicExposableWithListOfExposables(){}
+
+    public BasicExposableWithListOfExposables(List<IExposable> exposables)
+    {
+        Exposables = exposables;
+    }
+
+    public void ExposeData(IPersistenceContainer container)
+    {
+        container.Expose_List(ref Exposables, nameof(Exposables));
     }
 }
 

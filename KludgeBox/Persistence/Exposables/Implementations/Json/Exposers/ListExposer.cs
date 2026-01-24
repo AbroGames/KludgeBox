@@ -43,6 +43,7 @@ public partial class JsonPersistenceContainer
             {
                 WriteElementToArray(value, exposeValueAs, array);
             }
+            _currentNode[label] = array;
             return;
         }
 
@@ -169,7 +170,7 @@ public partial class JsonPersistenceContainer
             
             var newNode = new JsonObject();
             _currentNode = newNode;
-            exposable.ExposeData(this);
+            WriteDeep(exposable);
             array.Add(newNode);
             _currentNode = preservedNode;
             return;

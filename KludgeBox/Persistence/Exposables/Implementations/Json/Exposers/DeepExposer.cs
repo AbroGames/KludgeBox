@@ -25,8 +25,7 @@ public partial class JsonPersistenceContainer
 
             if (EnterNode(label))
             {
-                WriteMeta(TypeMetaPropertyName, value.GetType().FullName);
-                value.ExposeData(this);
+                WriteDeep(value);
                 ExitNode();
                 return;
             }
@@ -52,6 +51,12 @@ public partial class JsonPersistenceContainer
         {
             value?.ExposeData(this);
         }
+    }
+
+    private void WriteDeep(IExposable value)
+    {
+        WriteMeta(TypeMetaPropertyName, value.GetType().FullName);
+        value.ExposeData(this);
     }
     
     private IExposable RestoreCurrentExposable(object[]  ctorArgs)
