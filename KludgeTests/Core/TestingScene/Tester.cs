@@ -128,10 +128,10 @@ public partial class Tester : Node
     private void UpdateUi()
     {
         int totalTests = _finalContexts.Count;
-        int passedTests = _finalContexts.Count(ctx => ctx.Result == TestResult.Passed);
-        int failedTests = _finalContexts.Count(ctx => ctx.Result == TestResult.Failed);
-        int skippedTests = _finalContexts.Count(ctx => ctx.Result == TestResult.Skipped);
-        int unknownTests = _finalContexts.Count(ctx => ctx.Result == TestResult.Unknown);
+        int passedTests = _finalContexts.Count(ctx => ctx.Result is TestResult.Passed);
+        int failedTests = _finalContexts.Count(ctx => ctx.Result is TestResult.Failed or TestResult.Errored);
+        int skippedTests = _finalContexts.Count(ctx => ctx.Result is TestResult.Skipped or TestResult.NotRan);
+        int unknownTests = _finalContexts.Count(ctx => ctx.Result is TestResult.Unknown);
         
         _totalLabel.Text = $"Finished ({(passedTests + failedTests + skippedTests)}/{totalTests} tests))";
         _passedLabel.Text = $"Passed ({passedTests} tests)";
