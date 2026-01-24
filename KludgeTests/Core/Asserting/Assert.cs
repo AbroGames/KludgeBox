@@ -52,22 +52,38 @@ public static class Assert
     /// <summary>
     /// Asserts that two values are equal.
     /// </summary>
-    public static void AreEqual<T>(T expected, T actual, string failMessage = null)
+    public static void AreEqual<T>(T value1, T value2, string failMessage = null)
     {
-        if (!Equals(expected, actual))
+        if (!Equals(value1, value2))
         {
-            throw new AssertFailException(failMessage ?? $"Expected '{expected}', but got '{actual}'");
+            throw new AssertFailException(failMessage ?? $"Expected value '{value1}' to be equal to '{value2}' but they are not");
         }
     }
 
     /// <summary>
     /// Asserts that two values are not equal.
     /// </summary>
-    public static void AreNotEqual<T>(T notExpected, T actual, string failMessage = null)
+    public static void AreNotEqual<T>(T value1, T value2, string failMessage = null)
     {
-        if (Equals(notExpected, actual))
+        if (Equals(value1, value2))
         {
-            throw new AssertFailException(failMessage ?? $"Expected value not equal to '{notExpected}', but got '{actual}'");
+            throw new AssertFailException(failMessage ?? $"Expected value '{value1}' to be not equal to '{value2}' but they are equal");
+        }
+    }
+
+    public static void RefsAreEqual<T>(T value1, T value2, string failMessage = null) where T : class
+    {
+        if (!ReferenceEquals(value1, value2))
+        {
+            throw new AssertFailException(failMessage ?? $"Expected '{value1}' to be the same instance as '{value2}' but they are different");
+        }
+    }
+
+    public static void RefsAreNotEqual<T>(T value1, T value2, string failMessage = null) where T : class
+    {
+        if (!ReferenceEquals(value1, value2))
+        {
+            throw new AssertFailException(failMessage ?? $"Expected {value1}' and '{value2}' to be  different instances but they are the same instance");
         }
     }
 
