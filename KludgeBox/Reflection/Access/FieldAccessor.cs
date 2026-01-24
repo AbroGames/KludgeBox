@@ -1,10 +1,13 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
+using KludgeBox.Logging;
+using Serilog;
 
 namespace KludgeBox.Reflection.Access;
 
 public class FieldAccessor : IMemberAccessor
 {
+    private static ILogger _log = LogFactory.GetForStatic<FieldAccessor>();
     public MemberInfo Member => _field;
     public Type ValueType { get; }
     public IReadOnlyList<Attribute> Attributes { get; }
@@ -17,6 +20,7 @@ public class FieldAccessor : IMemberAccessor
 
     public FieldAccessor(FieldInfo field)
     {
+        _log.Debug("Creating accessor for field {Property}", field.Name);
         _field = field;
         ValueType = field.FieldType;
         Attributes = field.GetCustomAttributes().ToList();
