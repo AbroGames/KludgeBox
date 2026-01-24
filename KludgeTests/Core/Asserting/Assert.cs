@@ -81,7 +81,7 @@ public static class Assert
 
     public static void RefsAreNotEqual<T>(T value1, T value2, string failMessage = null) where T : class
     {
-        if (!ReferenceEquals(value1, value2))
+        if (ReferenceEquals(value1, value2))
         {
             throw new AssertFailException(failMessage ?? $"Expected {value1}' and '{value2}' to be  different instances but they are the same instance");
         }
