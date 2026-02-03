@@ -5,6 +5,11 @@
 public interface IPersistenceContainer
 {
     /// <summary>
+    /// Состояние (режим работы) контейнера в данный момент.
+    /// </summary>
+    ContainerState State { get; }
+    
+    /// <summary>
     /// Сохраняет или читает значение
     /// </summary>
     /// <param name="value">Значение</param>
