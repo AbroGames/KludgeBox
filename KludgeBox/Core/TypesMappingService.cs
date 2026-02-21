@@ -3,14 +3,14 @@ using Serilog;
 
 namespace KludgeBox.Core;
 
-public class TypesStorageService
+public class TypesMappingService
 {
     private readonly Dictionary<int, Type> _typeById = new();
     private readonly Dictionary<Type, int> _idByType = new();
 
     [Logger] private ILogger _log;
     
-    public TypesStorageService()
+    public TypesMappingService()
     {
         Di.Process(this);
     }
@@ -41,7 +41,7 @@ public class TypesStorageService
         {
             return id;
         }
-        throw new KeyNotFoundException($"Type {type.Name} is not found in {nameof(TypesStorageService)}");
+        throw new KeyNotFoundException($"Type {type.Name} is not found in {nameof(TypesMappingService)}");
     }
     
     public int GetId<T>()
@@ -55,6 +55,6 @@ public class TypesStorageService
         {
             return type;
         }
-        throw new KeyNotFoundException($"Id {id} is not found in {nameof(TypesStorageService)}.");
+        throw new KeyNotFoundException($"Id {id} is not found in {nameof(TypesMappingService)}.");
     }
 }
