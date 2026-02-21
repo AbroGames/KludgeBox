@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using Godot;
 
-namespace Persistence.Json;
+namespace KludgeBox.Persistence.Exposables.Json;
 
 
 public class Serializers

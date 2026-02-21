@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Persistence;
+namespace KludgeBox.Persistence.Exposables;
 
 public static class ExposableReflection
 {

@@ -1,4 +1,4 @@
-﻿namespace Persistence.Json;
+﻿namespace KludgeBox.Persistence.Exposables.Json;
 
 public partial class JsonPersistenceContainer
 {

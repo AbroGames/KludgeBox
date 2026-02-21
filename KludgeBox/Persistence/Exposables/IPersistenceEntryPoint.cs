@@ -1,4 +1,4 @@
-﻿namespace Persistence;
+﻿namespace KludgeBox.Persistence.Exposables;
 
 public interface IPersistenceEntryPoint
 {

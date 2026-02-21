@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Nodes;
 
-namespace Persistence.Json;
+namespace KludgeBox.Persistence.Exposables.Json;
 
 public partial class JsonPersistenceContainer
 {
@@ -142,7 +142,7 @@ public partial class JsonPersistenceContainer
         {
             var newNode = new JsonObject();
             _currentNode = newNode;
-            WriteMeta(IsNullMetaPropertyName, "true");
+            WriteMeta(Json.JsonPersistenceContainer.IsNullMetaPropertyName, "true");
             array.Add(newNode);
             _currentNode = preservedNode;
             return;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using Persistence;
+using KludgeBox.Persistence.Exposables;
 
 namespace KludgeTests.Tests.PersistenceTests.ExposableTests;
 
