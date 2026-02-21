@@ -1,5 +1,4 @@
 ﻿using System;
-using Godot;
 using KludgeBox.DI.Requests.SceneServiceInjection;
 using KludgeBox.Testing;
 using KludgeBox.Testing.Asserting;

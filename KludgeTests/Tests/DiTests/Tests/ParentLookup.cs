@@ -1,5 +1,4 @@
 ﻿using KludgeBox.DI.Requests;
-using KludgeBox.DI.Requests.ChildInjection;
 using KludgeBox.DI.Requests.ParentInjection;
 using KludgeBox.Testing;
 using KludgeBox.Testing.Asserting;

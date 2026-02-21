@@ -2,7 +2,6 @@
 using KludgeBox.DI.Requests;
 using KludgeBox.DI.Requests.ChildInjection;
 using KludgeBox.DI.Requests.NotNullCheck;
-using KludgeBox.DI.Requests.ParentInjection;
 
 namespace KludgeTests.Tests.DiTests;
 

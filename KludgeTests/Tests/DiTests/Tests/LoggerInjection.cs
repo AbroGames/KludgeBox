@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Godot;
-using KludgeBox.DI;
 using KludgeBox.DI.Requests.LoggerInjection;
 using KludgeBox.Testing;
 using KludgeBox.Testing.Asserting;
