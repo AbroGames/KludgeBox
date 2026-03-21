@@ -32,7 +32,7 @@ public class TypesMappingService
             _idByType[type] = i;
         }
 
-        _log.Information("Add {count} types.", _typeById.Count);
+        _log.Information("Added {count} types.", _typeById.Count);
     }
 
     public int GetId(Type type)
