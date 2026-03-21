@@ -1,7 +1,7 @@
 ﻿using System.Linq;
+using KludgeBox.Persistence.Exposables.Json;
 using KludgeBox.Testing;
 using KludgeBox.Testing.Asserting;
-using Persistence.Json;
 
 namespace KludgeTests.Tests.PersistenceTests.ExposableTests;
 

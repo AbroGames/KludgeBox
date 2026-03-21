@@ -1,4 +1,4 @@
-﻿namespace Persistence.Json;
+﻿namespace KludgeBox.Persistence.Exposables.Json;
 
 public partial class JsonPersistenceContainer
 {
@@ -52,13 +52,13 @@ public partial class JsonPersistenceContainer
 
     private void WriteDeep(IExposable value)
     {
-        WriteMeta(TypeMetaPropertyName, value.GetType().FullName);
+        WriteMeta(Json.JsonPersistenceContainer.TypeMetaPropertyName, value.GetType().FullName);
         value.ExposeData(this);
     }
     
     private IExposable RestoreCurrentExposable(object[]  ctorArgs)
     {
-        var typeName = ReadMeta(TypeMetaPropertyName);
+        var typeName = ReadMeta(Json.JsonPersistenceContainer.TypeMetaPropertyName);
         var exposable = (IExposable)ExposableReflection.GetTypeByName(typeName).GetInstanceOfType(ctorArgs);
         exposable.ExposeData(this);
         

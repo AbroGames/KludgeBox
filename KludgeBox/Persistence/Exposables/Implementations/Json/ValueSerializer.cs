@@ -1,4 +1,4 @@
-﻿namespace Persistence.Json;
+﻿namespace KludgeBox.Persistence.Exposables.Json;
 
 public delegate object ParseDelegate(string text);
 public delegate string SerializeDelegate(object value);

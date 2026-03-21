@@ -1,5 +1,4 @@
-﻿using KludgeBox.DI;
-using KludgeBox.Testing;
+﻿using KludgeBox.Testing;
 using static KludgeTests.Tests.LocalServices;
 
 namespace KludgeTests.Tests.DiTests;
