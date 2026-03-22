@@ -9,6 +9,19 @@ public interface IBaseMemberInfo
     IReadOnlyList<Attribute> Attributes { get; }
     bool IsPublic { get; }
 
+    Attribute GetAttribute<TAttribute>() where TAttribute : Attribute
+    {
+        return GetAttribute(typeof(TAttribute));
+    }
+    Attribute GetAttribute(Type attributeType)
+    {
+        if (TryGetAttribute(attributeType, out Attribute attribute))
+        {
+            return attribute;
+        }
+        return null;
+    }
+    
     bool HasAttribute(Type attributeType)
     {
         return Attributes.Any(attr => attr.GetType() == attributeType);
