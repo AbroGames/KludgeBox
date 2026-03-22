@@ -9,9 +9,9 @@ public interface IBaseMemberInfo
     IReadOnlyList<Attribute> Attributes { get; }
     bool IsPublic { get; }
 
-    Attribute GetAttribute<TAttribute>() where TAttribute : Attribute
+    TAttribute GetAttribute<TAttribute>() where TAttribute : Attribute
     {
-        return GetAttribute(typeof(TAttribute));
+        return GetAttribute(typeof(TAttribute)) as TAttribute;
     }
     Attribute GetAttribute(Type attributeType)
     {
