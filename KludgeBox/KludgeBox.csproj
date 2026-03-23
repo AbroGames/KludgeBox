@@ -1,6 +1,6 @@
 ﻿<!--suppress CheckTagEmptyBody -->
 
-<Project Sdk="Godot.NET.Sdk/4.5.0">
+<Project Sdk="Godot.NET.Sdk/4.6.1">
     <PropertyGroup>
         <!-- Универсальное значение версии, которое будет скопировано в Version, AssemblyVersion и FileVersion
         Формат: Major.Minor.Patch
@@ -8,7 +8,7 @@
         Minor - добавление новых фич, запланированое плавное устаревание API
         Patch - небольшие фиксы и незначительный функционал
          -->
-        <GeneralVersion>3.2.2</GeneralVersion>
+        <GeneralVersion>3.3.0</GeneralVersion>
 
         <!--
         Пререлизный тег, на случай, когда надо зарелизить что-то, что не должно попасть в релиз
