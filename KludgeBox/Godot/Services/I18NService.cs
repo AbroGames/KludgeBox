@@ -7,15 +7,15 @@ namespace KludgeBox.Godot.Services;
 
 public class I18NService
 {
-    public record LocaleInfo(string Code, string Name, int MissingMessages);
+    public record LocaleInfo(string Code, string Name, int MissingMessages, int UnnecessaryMessages);
     
-    private const string BaseLocaleForStart = "en";
+    public const string DefaultLocale = "en";
     private const string EmptyTranslation = "[&\"\"]";
+    private const string LocaleSeparatorSymbol = "_";
     
-    public IReadOnlyDictionary<string, LocaleInfo> LocaleInfoByCode => _localeInfoByCode;
-    public Translation BaseTranslation { get; private set; }
+    public IReadOnlyList<LocaleInfo> Locales => _locales;
     
-    private Dictionary<string, LocaleInfo> _localeInfoByCode;
+    private List<LocaleInfo> _locales;
     private SceneTree _sceneTree;
     
     [Logger] private ILogger _log;
@@ -29,30 +29,57 @@ public class I18NService
     {
         _sceneTree = sceneTree;
 
-        BaseTranslation = TranslationServer.GetTranslations()
-            .FirstOrDefault(translation => translation.Locale.Equals(BaseLocaleForStart));
-        if (BaseTranslation == null)
+        Translation baseTranslation = TranslationServer.GetTranslations()
+            .FirstOrDefault(translation => translation.Locale.Equals(DefaultLocale));
+        if (baseTranslation == null)
         {
-            BaseTranslation = TranslationServer.GetTranslations().First();
-            _log.Warning("Could not find a translation for the base locale: '{baseLocale}'. Use '{useLocale}' locale as base.'", 
-                BaseLocaleForStart, BaseTranslation.Locale);
+            _log.Error("Could not find a translation for the base locale: '{baseLocale}'.", DefaultLocale);
+            return;
         }
         
-        _localeInfoByCode = TranslationServer.GetTranslations().ToDictionary(translation => translation.Locale,
-            translation => new LocaleInfo(
-                translation.Locale, 
-                TranslationServer.GetLanguageName(translation.Locale), 
-                CountMissingMessages(BaseTranslation, translation)));
+        _locales = TranslationServer.GetTranslations().Select(translation => new LocaleInfo(
+                translation.Locale,
+                TranslationServer.GetLanguageName(translation.Locale),
+                CountMissingMessages(baseTranslation, translation),
+                CountMissingMessages(translation, baseTranslation)))
+            .ToList();
         _log.Information("Loaded {count} locales. Base locale '{baseLocale}' with {messages} messages.",
-            _localeInfoByCode.Count, BaseTranslation.Locale, BaseTranslation.Messages.Count);
+            _locales.Count, baseTranslation.Locale, baseTranslation.Messages.Count);
 
-        foreach (LocaleInfo localeInfo in _localeInfoByCode.Values)
+        foreach (LocaleInfo localeInfo in _locales)
         {
             if (localeInfo.MissingMessages > 0)
             {
                 _log.Warning("Locale '{locale}' doesn't contain {messages} messages.", localeInfo.Code, localeInfo.MissingMessages);
             }
+            if (localeInfo.UnnecessaryMessages > 0)
+            {
+                _log.Warning("Locale '{locale}' contain {messages} unnecessary messages.", localeInfo.Code, localeInfo.UnnecessaryMessages);
+            }
         }
+    }
+
+    public LocaleInfo GetLocaleInfoByCode(string code)
+    {
+        code = GetLangPartOfLocale(code);
+        return _locales.FirstOrDefault(localeInfo => localeInfo.Code.ToLower().Equals(code), null);
+    }
+    
+    public LocaleInfo GetLocaleInfoByName(string name)
+    {
+        name = name.ToLower();
+        return _locales.FirstOrDefault(localeInfo => localeInfo.Name.ToLower().Equals(name), null);
+    }
+
+    public LocaleInfo GetCurrentLocaleInfo()
+    {
+        return GetLocaleInfoByCode(TranslationServer.GetLocale());
+    }
+
+    public void SetCurrentLocale(string code)
+    {
+        code = GetLangPartOfLocale(code);
+        TranslationServer.SetLocale(code);
     }
 
     public string Tr(StringName message, StringName context = null) => 
@@ -75,5 +102,14 @@ public class I18NService
         }
         
         return count;
+    }
+
+    private string GetLangPartOfLocale(string code)
+    {
+        if (code.Contains(LocaleSeparatorSymbol))
+        {
+            code = code.Split(LocaleSeparatorSymbol)[0];
+        }
+        return code.ToLower();
     }
 }
