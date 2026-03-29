@@ -7,9 +7,9 @@ public abstract partial class AbstractStorage : Node
 {
     
     public IReadOnlyList<PackedScene> GetScenesList() => _scenesList.AsReadOnly();
-    public IReadOnlyDictionary<string, PackedScene> GetScenesDictionary() => _scenes.AsReadOnly();
+    public IReadOnlyDictionary<string, PackedScene> GetScenesDictionary() => _sceneByName.AsReadOnly();
     
-    private readonly Dictionary<string, PackedScene> _scenes = new();
+    private readonly Dictionary<string, PackedScene> _sceneByName = new();
     private readonly List<PackedScene> _scenesList = new();
     
     /// <summary>
@@ -28,7 +28,7 @@ public abstract partial class AbstractStorage : Node
         
     public bool TryGetScene(string name, out PackedScene scene)
     {
-        return _scenes.TryGetValue(name, out scene);
+        return _sceneByName.TryGetValue(name, out scene);
     }
     
     private void RegisterScenes(object obj)
@@ -42,7 +42,7 @@ public abstract partial class AbstractStorage : Node
             if (!Attribute.IsDefined(property, typeof(ExportAttribute))) continue;
 
             var scene = property.GetValue(this) as PackedScene;
-            _scenes[property.Name] = scene;
+            _sceneByName[property.Name] = scene;
             _scenesList.Add(scene);
         }
     }

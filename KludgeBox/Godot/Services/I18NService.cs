@@ -62,13 +62,16 @@ public class I18NService
     public LocaleInfo GetLocaleInfoByCode(string code)
     {
         code = GetLangPartOfLocale(code);
-        return _locales.FirstOrDefault(localeInfo => localeInfo.Code.ToLower().Equals(code), null);
+        return _locales.FirstOrDefault(localeInfo => 
+            string.Equals(localeInfo.Code, code, StringComparison.OrdinalIgnoreCase),
+            null);
     }
     
     public LocaleInfo GetLocaleInfoByName(string name)
     {
-        name = name.ToLower();
-        return _locales.FirstOrDefault(localeInfo => localeInfo.Name.ToLower().Equals(name), null);
+        return _locales.FirstOrDefault(localeInfo => 
+            string.Equals(localeInfo.Name, name, StringComparison.OrdinalIgnoreCase),
+            null);
     }
 
     public LocaleInfo GetCurrentLocaleInfo()
@@ -76,10 +79,27 @@ public class I18NService
         return GetLocaleInfoByCode(TranslationServer.GetLocale());
     }
 
-    public void SetCurrentLocale(string code)
+    public bool SetCurrentLocale(string code)
     {
         code = GetLangPartOfLocale(code);
+        if (GetLocaleInfoByCode(code) == null)
+        {
+            _log.Error("Could not find a locale with code '{code}'.", code);
+            return false;
+        }
+        
         TranslationServer.SetLocale(code);
+        return true;
+    }
+
+    public LocaleInfo GetUserOsLocaleInfo()
+    {
+        return GetLocaleInfoByCode(OS.GetLocaleLanguage());
+    }
+    
+    public LocaleInfo GetUserOsLocaleInfoOrDefault()
+    {
+        return GetLocaleInfoByCode(OS.GetLocaleLanguage()) ?? GetLocaleInfoByCode(DefaultLocale);
     }
 
     public string Tr(StringName message, StringName context = null) => 
@@ -106,10 +126,10 @@ public class I18NService
 
     private string GetLangPartOfLocale(string code)
     {
-        if (code.Contains(LocaleSeparatorSymbol))
+        if (code != null && code.Contains(LocaleSeparatorSymbol))
         {
             code = code.Split(LocaleSeparatorSymbol)[0];
         }
-        return code.ToLower();
+        return code;
     }
 }
