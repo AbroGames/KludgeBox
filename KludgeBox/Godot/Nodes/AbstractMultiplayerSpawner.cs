@@ -59,8 +59,16 @@ public abstract partial class AbstractMultiplayerSpawner : MultiplayerSpawner
 
     public override void _Ready()
     {
+        //Call Di.Process again, because IniPreReady calls only on server-side.
+        if (_log == null) Di.Process(this);
+        
         foreach (var packedScene in GetPackedScenesForSpawn())
         {
+            if (packedScene == null)
+            {
+                _log.Error("One of PackedScenes is null in AbstractMultiplayerSpawner: {path}", GetPath());
+                continue;
+            }
             AddSpawnableScene(packedScene.ResourcePath);
         }
         if (GetSelfSync()) 
