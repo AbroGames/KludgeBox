@@ -8,6 +8,7 @@ internal static class GodotTools
 {
     public const string GodotProjectFileName = "project.godot";
     
+    
     public static bool TryGetGodotRoot(string pathFrom, out string rootPath)
     {
         if (pathFrom.StartsWith("res://", StringComparison.OrdinalIgnoreCase))

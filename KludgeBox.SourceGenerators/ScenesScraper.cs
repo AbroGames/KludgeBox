@@ -1,8 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using Microsoft.CodeAnalysis;
 
 namespace KludgeBox.SourceGenerators;
 
-internal class ScenesScraper
+internal static class ScenesScraper
 {
-    
+    public static IEnumerable<ProjectFile> GetFilesIn(Compilation compilation, string gdProjectRoot, string[] include, string[] exclude)
+    {
+        throw new NotImplementedException();
+    }
 }
