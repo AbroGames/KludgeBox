@@ -4,6 +4,7 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\KludgeBox.SourceGenerators\KludgeBox.SourceGenerators.csproj" />
     <ProjectReference Include="..\KludgeBox\KludgeBox.csproj" />
   </ItemGroup>
 </Project>

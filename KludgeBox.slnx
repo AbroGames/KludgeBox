@@ -3,6 +3,7 @@
     <File Path=".gitignore" />
     <File Path="README.md" />
   </Folder>
+  <Project Path="KludgeBox.SourceGenerators/KludgeBox.SourceGenerators.csproj" />
   <Project Path="KludgeBox/KludgeBox.csproj" />
   <Project Path="KludgeTests/KludgeTests.csproj" />
 </Solution>
