@@ -75,6 +75,8 @@
     <ItemGroup>
         <!-- Включение SourceLink для упрощения отладки либы конечным пользователем -->
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="[4.8.0]" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.CSharp" Version="4.7.0" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup>
