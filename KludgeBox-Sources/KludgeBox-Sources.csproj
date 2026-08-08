@@ -10,7 +10,7 @@
 <Project Sdk="Godot.NET.Sdk/4.7.1">
     <PropertyGroup>
         <!-- Версия дублирует схему основного проекта KludgeBox -->
-        <GeneralVersion>3.3.3</GeneralVersion>
+        <GeneralVersion>4.0.0</GeneralVersion>
         <PrereleaseFlag></PrereleaseFlag>
         <VersionSuffix Condition="'$(PrereleaseFlag)' != ''">-$(PrereleaseFlag)</VersionSuffix>
     </PropertyGroup>
