@@ -1,6 +1,6 @@
 ﻿<!--suppress CheckTagEmptyBody -->
 
-<Project Sdk="Godot.NET.Sdk/4.6.1">
+<Project Sdk="Godot.NET.Sdk/4.7.1">
     <PropertyGroup>
         <!-- Универсальное значение версии, которое будет скопировано в Version, AssemblyVersion и FileVersion
         Формат: Major.Minor.Patch
@@ -88,4 +88,13 @@
     <PropertyGroup>
         <NoWarn>CS0649</NoWarn>
     </PropertyGroup>
+
+    <!--
+        Раскрываем internal-видимость для сборки KludgeBox.Sources: Godot-derived узлы,
+        вынесенные туда, обращаются к внутреннему сервис-локатору KludgeBoxServices
+        (Di, Rand, MembersScanner).
+    -->
+    <ItemGroup>
+        <InternalsVisibleTo Include="KludgeBox.Sources" />
+    </ItemGroup>
 </Project>

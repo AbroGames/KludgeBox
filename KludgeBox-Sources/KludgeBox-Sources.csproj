@@ -1,0 +1,69 @@
+﻿<!--suppress CheckTagEmptyBody -->
+
+<!--
+    Сборка с Godot-derived типами (наследниками Node, Resource и т.д.).
+    Вынесена из основного проекта KludgeBox, чтобы редактор Godot мог
+    выгружать/перезагружать эти типы независимо от ядра библиотеки.
+    Неймспейсы типов остаются KludgeBox.* (RootNamespace=KludgeBox),
+    поэтому ссылаться на них можно так же, как раньше.
+-->
+<Project Sdk="Godot.NET.Sdk/4.7.1">
+    <PropertyGroup>
+        <!-- Версия дублирует схему основного проекта KludgeBox -->
+        <GeneralVersion>3.3.3</GeneralVersion>
+        <PrereleaseFlag></PrereleaseFlag>
+        <VersionSuffix Condition="'$(PrereleaseFlag)' != ''">-$(PrereleaseFlag)</VersionSuffix>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <!-- Базовые настройки проекта -->
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+
+        <!-- Критично: неймспейсы типов остаются KludgeBox.* (как в ядре),
+             имя сборки при этом уникальное — KludgeBox.Sources. -->
+        <RootNamespace>KludgeBox</RootNamespace>
+        <AssemblyName>KludgeBox.Sources</AssemblyName>
+
+        <!--
+            Sources — это библиотека, а не запускаемое приложение.
+            Godot SDK по умолчанию генерирует точку входа Main (GodotPluginsInitializer)
+            для каждого Godot-проекта. Здесь Main не нужен, а при ссылке на ядро
+            (тоже Godot-проект) возникает конфликт CS0436 двух Main. Отключаем
+            только этот генератор; Script-генераторы для partial class-узлов остаются.
+        -->
+        <GodotDisabledSourceGenerators>GodotPluginsInitializer</GodotDisabledSourceGenerators>
+
+        <!-- Метаданные -->
+        <Version>$(GeneralVersion)$(VersionSuffix)</Version>
+        <Title>KludgeBox.Sources</Title>
+        <Authors>Bronuh;AbroGames</Authors>
+        <Description>Godot-derived types for KludgeBox (separate assembly for editor reload)</Description>
+        <Copyright>AbroGames</Copyright>
+        <PackageProjectUrl>https://github.com/AbroGames/KludgeBox</PackageProjectUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>Godot;Library</PackageTags>
+
+        <!-- Настройка SourceLink (как в ядре) -->
+        <RepositoryUrl>https://github.com/AbroGames/KludgeBox</RepositoryUrl>
+        <IncludeSymbols>true</IncludeSymbols>
+        <IncludeSource>true</IncludeSource>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <DebugType>embedded</DebugType>
+
+        <AssemblyVersion>$(GeneralVersion)</AssemblyVersion>
+        <FileVersion>$(GeneralVersion)</FileVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- Ядро библиотеки: все не-Godot-derived типы, DI-контейнер, расширения, сервисы. -->
+        <ProjectReference Include="..\KludgeBox\KludgeBox.csproj" />
+    </ItemGroup>
+
+    <PropertyGroup>
+        <NoWarn>CS0649</NoWarn>
+    </PropertyGroup>
+</Project>
