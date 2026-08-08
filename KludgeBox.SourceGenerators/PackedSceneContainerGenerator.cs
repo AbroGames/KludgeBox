@@ -39,7 +39,7 @@ public class PackedSceneContainerGenerator : IIncrementalGenerator
                 var include = GetArray(attr, 0);
                 var exclude = GetArray(attr, 1);
 
-                return new ClassData(symbol, include, exclude);
+                return new ClassData(symbol, include, exclude, 1);
             }
         }
 
@@ -54,11 +54,16 @@ public class PackedSceneContainerGenerator : IIncrementalGenerator
 
         var arg = attr.ConstructorArguments[index];
 
-        if (arg.Kind == TypedConstantKind.Array)
+        if (arg.Kind is TypedConstantKind.Array)
         {
-            return arg.Values
-                .Select(v => v.Value?.ToString() ?? "")
-                .ToArray();
+            var rawValues = arg.Values;
+            if (rawValues.IsDefaultOrEmpty) return Array.Empty<string>();
+            
+            var values = rawValues.Select(rawValue => rawValue.Value);
+            var valuesAsStings = values.Select(value => value.ToString() ?? "");
+            var valuesAsArray = valuesAsStings.ToArray();
+
+            return valuesAsArray;
         }
 
         return Array.Empty<string>();
@@ -74,8 +79,9 @@ public class PackedSceneContainerGenerator : IIncrementalGenerator
         var scenes = ScanScenes(projectRoot, data.Include, data.Exclude);
 
         var source = GenerateCode(data, scenes);
-
-        context.AddSource($"{data.ClassSymbol.Name}.PackedScenes.g.cs", source);
+        var name = $"{data.ClassSymbol.Name}.PackedScenes.g.cs";
+        context.AddSource(name, source);
+        Console.WriteLine($"Generated {name}:\n {source}");
     }
 
     private static string? FindProjectRoot()
@@ -174,26 +180,29 @@ public class PackedSceneContainerGenerator : IIncrementalGenerator
         return sb.ToString();
     }
 
-    private record ClassData
+    private record ClassData : IEquatable<ClassData>
     {
         public ClassData(INamedTypeSymbol classSymbol,
             string[] include,
-            string[] exclude)
+            string[] exclude,
+            int version)
         {
             ClassSymbol = classSymbol;
             Include = include;
             Exclude = exclude;
+            Version = version;
         }
 
         public INamedTypeSymbol ClassSymbol { get; }
         public string[] Include { get; }
         public string[] Exclude { get; }
-
-        public void Deconstruct(out INamedTypeSymbol classSymbol, out string[] include, out string[] exclude)
+        public int Version { get; }
+        public void Deconstruct(out INamedTypeSymbol classSymbol, out string[] include, out string[] exclude, out int version)
         {
             classSymbol = ClassSymbol;
             include = Include;
             exclude = Exclude;
+            version = Version;
         }
     }
     

@@ -1,0 +1,9 @@
+﻿{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "KludgeBox.SourceGenerators": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "../KludgeTests/KludgeTests.csproj"
+    }
+  }
+}

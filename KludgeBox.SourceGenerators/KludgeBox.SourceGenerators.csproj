@@ -34,7 +34,7 @@
         1.0.1-aaa
         1.0.0
         -->
-        <PrereleaseFlag></PrereleaseFlag>
+        <PrereleaseFlag>alpha2</PrereleaseFlag>
 
         <!-- Генерируем суффикс версии, если указан пререлизный флаг -->
         <VersionSuffix Condition="'$(PrereleaseFlag)' != ''">-$(PrereleaseFlag)</VersionSuffix>
@@ -69,6 +69,9 @@
         <!-- Дополнительные свойства для версии сборки и файла сборки внутри пакета -->
         <AssemblyVersion>$(GeneralVersion)</AssemblyVersion>
         <FileVersion>$(GeneralVersion)</FileVersion>
+        <OutputItemType>Analyzer</OutputItemType>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     </PropertyGroup>
 
 
