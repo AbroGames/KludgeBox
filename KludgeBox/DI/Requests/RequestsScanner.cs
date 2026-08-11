@@ -26,8 +26,9 @@ public class RequestsScanner
         scanner.RegisterRequestScanner(new ChildInjectionRequestScanner());
         scanner.RegisterRequestScanner(new ParentInjectionRequestScanner());
         scanner.RegisterRequestScanner(new NotNullCheckRequestScanner());
-        // MpSync-инъекция вынесена в сборку KludgeBox.Sources (Godot-derived типы).
-        // Подключается опционально через di.RequestsScanner.EnableMpSyncInjection().
+        // MpSync-инъекция ([Sync]) держит Godot-derived типы и поэтому живёт вне библиотеки,
+        // в Godot-проекте потребителя; регистрируется там через
+        // Di = new(RequestsScanner.CreateDefault().EnableMpSyncInjection());.
         
         return scanner;
     }

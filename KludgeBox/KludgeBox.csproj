@@ -8,7 +8,7 @@
         Minor - добавление новых фич, запланированое плавное устаревание API
         Patch - небольшие фиксы и незначительный функционал
          -->
-        <GeneralVersion>4.0.0</GeneralVersion>
+        <GeneralVersion>4.0.1</GeneralVersion>
 
         <!--
         Пререлизный тег, на случай, когда надо зарелизить что-то, что не должно попасть в релиз
@@ -88,13 +88,4 @@
     <PropertyGroup>
         <NoWarn>CS0649</NoWarn>
     </PropertyGroup>
-
-    <!--
-        Раскрываем internal-видимость для сборки KludgeBox.Sources: Godot-derived узлы,
-        вынесенные туда, обращаются к внутреннему сервис-локатору KludgeBoxServices
-        (Di, Rand, MembersScanner).
-    -->
-    <ItemGroup>
-        <InternalsVisibleTo Include="KludgeBox.Sources" />
-    </ItemGroup>
 </Project>
