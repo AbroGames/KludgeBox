@@ -35,7 +35,7 @@ public class TypesMappingService
         _log.Information("Added {count} types.", _typeById.Count);
     }
 
-    public int GetId(Type type)
+    public int GetIdByType(Type type)
     {
         if (_idByType.TryGetValue(type, out int id))
         {
@@ -44,12 +44,12 @@ public class TypesMappingService
         throw new KeyNotFoundException($"Type {type.Name} is not found in {nameof(TypesMappingService)}");
     }
     
-    public int GetId<T>()
+    public int GetIdByType<T>()
     {
-        return GetId(typeof(T));
+        return GetIdByType(typeof(T));
     }
 
-    public Type GetType(int id)
+    public Type GetTypeById(int id)
     {
         if (_typeById.TryGetValue(id, out Type type))
         {
