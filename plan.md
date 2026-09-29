@@ -489,6 +489,19 @@ Tests:
 - vector, quaternion and color components;
 - invalid attribute parameters throw.
 
+Implementation notes (as built):
+
+- All new types are public and live in `KludgeBox.Replication.Codecs` (except `QuantizeAttribute`, root namespace). `QuantizeAttribute` exposes `Min`, `Max`, `Precision` and `IsBounded` (unbounded: `Min`/`Max` are NaN); it does not validate in its constructor, validation happens in `CodecOptions.Apply` so the error carries the member path.
+- **Deviation:** `ComponentAdapter<T>.Compose` takes `ReadOnlySpan<double>` instead of `double[]`, and `QuantizedCodec<T>.Read` collects components in a `stackalloc` buffer instead of a reused field buffer. This is allocation-free and also thread-safe. The static registry is the non-generic `ComponentAdapter` class (`TryGet<T>`, `IsSupported(Type)`), backed by a static generic cache, so lookup costs nothing after the first call. `MaxDelta` is NaN-propagating (a NaN component or `inf - inf` gives NaN).
+- Rounding everywhere (steps, quantized values, integer composition) is `MidpointRounding.AwayFromZero`. Integer adapters use generic math (`CreateSaturating`), so composition clamps to the type range and NaN becomes 0. `long` components go through `double`, so values above 2^53 lose precision.
+- `Quantizer` is the abstract base (`Quantize(double) → long step`, `Dequantize`, `WriteStep`, `ReadStep`); the once-per-member warning lives in the base (`ReportOutOfRange`, `HasReportedOutOfRange`), one quantizer instance per member, shared by all components. A `null` logger means no logging.
+- `BoundedQuantizer`: `steps = round((max - min) / precision)`, `bitLength(steps)` bits. **Clarification:** the effective step size is `(max - min) / steps`, not `precision`, so `min` and `max` are exactly representable and dequantized values never leave `[min, max]` (with `precision` stepping, a rounded-up `steps` would dequantize above `max`). The error stays below one `precision`. `steps == 0` writes 0 bits and always reads `min`. Also rejected: non-finite `min`/`max`/`precision`. Reading a step above `steps` is a `ReplicationFormatException`.
+- `UnboundedQuantizer`: NaN becomes step 0, `|step| > 2^62` is clamped to ±2^62; reading a step with magnitude above 2^62 is a `ReplicationFormatException`.
+- Out-of-range warnings can also be triggered from `IsChanged` (it quantizes both values); it is still only one warning per member.
+- `ToleranceCodec<T>.IsChanged` = `inner.IsChanged && (MaxDelta is NaN || MaxDelta > tolerance)`. With a plain inner codec this gives the exact NaN fallback of §8; with a `QuantizedCodec` inner it gives "both conditions must hold". Tolerance must be finite and `>= 0`.
+- `CodecOptions.Apply` returns the base codec unchanged when there is no `Quantize` and tolerance is 0 (no type support needed then). With `Quantize`, the base codec is not used for the wire. `Nullable<T>` of supported types is not supported (not listed in §8).
+- Tests are in `KludgeUnitTests/Replication/QuantizationTests.cs`, including a no-allocation check for quantized/tolerance `Write`, `Read` and `IsChanged`.
+
 ### Step 5 — Type model, value members, `Replicator` core
 
 Files:
