@@ -395,6 +395,16 @@ Files:
   Uses Expression trees, converts the owner to `member.DeclaringType` and the value to or from `TValue` when they differ, and works with non-public members.
 - `KludgeBox/Core/ITypeIdMapping.cs` (`int GetId(Type)`, `Type GetType(int)`). `TypesMappingService` implements it; no behavior change.
 
+Implementation notes (as built):
+
+- `TypedAccessors` is a `public static class` in `KludgeBox.Reflection.Access`.
+- Static members are supported, and the owner argument is ignored for them. A literal (`const`) field has a getter that returns the constant value.
+- Invalid input throws `ArgumentException`, not `ReplicationException`, because the helper is general-purpose; the model builder (step 5) wraps these errors with the member path. `ArgumentException` covers: something other than a field or property, indexers, a getter for a property that has no getter, an owner type unrelated to `DeclaringType`, and a value type that `Expression.Convert` cannot convert. A `null` member throws `ArgumentNullException`.
+- `CreateSetter` for an instance member of a **value-type** declaring type throws `ArgumentException`, because the write would change a copy. `CanWrite` is checked first, so a readonly field of a struct still returns `null`.
+- `CanWrite` returns `false` for readonly fields, literal fields and properties with no setter (including a non-public one). An init-only setter counts as writable.
+- A `PropertyInfo` obtained through a derived type (`ReflectedType != DeclaringType`) is normalized to the declaring type's `PropertyInfo` first, because otherwise private accessors of the base type are invisible. A literal field's value is taken with `FieldInfo.GetValue(null)` so that enum constants keep their enum type.
+- Tests are in `KludgeUnitTests/Reflection/TypedAccessorsTests.cs`. `TypesMappingService` is checked only through `typeof` (never constructed, see §11).
+
 Tests: getters and setters for:
 
 - public, private and protected fields and properties;

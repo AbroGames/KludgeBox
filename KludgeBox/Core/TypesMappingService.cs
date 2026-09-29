@@ -3,7 +3,7 @@ using Serilog;
 
 namespace KludgeBox.Core;
 
-public class TypesMappingService
+public class TypesMappingService : ITypeIdMapping
 {
     private readonly Dictionary<int, Type> _typeById = new();
     private readonly Dictionary<Type, int> _idByType = new();
