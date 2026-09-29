@@ -359,6 +359,15 @@ Files:
   Writes clear the target bits before setting them, so `Rewind` needs no zeroing. The unused high bits of the last byte are zeroed on `ToArray` and `AsSpan`.
 - `KludgeBox/Replication/Bits/BitReader.cs`: a `ref struct` over `ReadOnlySpan<byte>` with the mirror read methods plus `BitPosition` and `RemainingBits`. Any overrun, or a varuint longer than 10 groups, throws `ReplicationFormatException`.
 
+Implementation notes (as built):
+
+- `ReplicationFormatException` derives from `ReplicationException`.
+- `ReplicationLimits` also exposes `DefaultMaxDepth` / `DefaultMaxCollectionCount` constants; both limits are settable properties.
+- `BitWriter.AsSpan()` returns `ReadOnlySpan<byte>`, valid until the next write. The mirror of `WriteBytes` is `BitReader.ReadBytes(Span<byte> destination)`.
+- `BitWriter.MaxVarUIntGroups` (10), `BitWriter.ZigZagEncode` and `BitReader.ZigZagDecode` are public helpers.
+- `ReadVarUInt` additionally rejects a 10th group that carries more than one data bit (value does not fit in 64 bits) or has the continuation bit set.
+- A failed read (overrun) does not move `BitPosition`. Invalid bit counts (outside 0..64) and invalid `Rewind`/`SetBit` positions are programmer errors and throw `ArgumentOutOfRangeException`.
+
 Tests (`KludgeUnitTests/Replication/BitStreamTests.cs`):
 
 - a smoke test that a KludgeBox type (e.g. `Godot.Vector2` math) loads without the engine;

@@ -5,4 +5,5 @@
   </Folder>
   <Project Path="KludgeBox/KludgeBox.csproj" />
   <Project Path="KludgeTests/KludgeTests.csproj" />
+  <Project Path="KludgeUnitTests/KludgeUnitTests.csproj" />
 </Solution>
