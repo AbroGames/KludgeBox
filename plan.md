@@ -455,6 +455,17 @@ Tests:
 - registering a custom codec overrides the default;
 - `CanEncode` for enum, `int?` and an unsupported class.
 
+Implementation notes (as built):
+
+- All codecs live in `KludgeBox.Replication.Codecs` and are `public sealed` so that users can compose them. Stateless codecs expose a shared `Instance`; `StringCodec.Default` is the 64 KiB instance registered by default. Primitive codec names follow the CLR names (`Int32Codec`, `SingleCodec`, …).
+- `ReplicationCodecs` is thread-safe (a lock; the registry is used at model build time, not per frame). Explicitly registered codecs always win over lazily built ones. `Register<T>` also drops all lazily built codecs, so a cached `NullableCodec<int>` picks up a newly registered `int` codec. `Nullable<T>` is buildable for any `T` that has a codec, including user-registered structs. `CanEncode` returns `false` for open generic, by-ref, pointer and by-ref-like types; `null` throws `ArgumentNullException`.
+- `EnumCodec<TEnum>` has the constraint `where TEnum : unmanaged, Enum` and exposes `BitCount` and `IsCompact`. Signedness is checked against the underlying type, so a negative value is detected by its sign bit. In compact mode, **reading** a value above the maximum defined one throws `ReplicationFormatException` (the plan only specified the write side). Undefined values inside the range are allowed in both directions. An enum without defined values uses 1 bit and only accepts 0.
+- `StringCodec`: writing a string longer than the limit throws `ReplicationException`. On read, the declared length is checked against the limit and against `RemainingBits` before any buffer is taken, so bogus lengths cannot cause large allocations. Encoding and decoding use a 256-byte `stackalloc` buffer or an `ArrayPool` buffer. Invalid UTF-8 is decoded with replacement characters, not an exception. An empty string is read back as `string.Empty`, which is distinct from `null`.
+- `NullableCodec<T>` exposes the wrapped codec as `Inner`. Its `IsChanged` treats null vs. value as changed and otherwise delegates to the inner codec.
+- The Godot codecs assume the default single-precision Godot build (`real_t` = `float`). Integer vectors and `Rect2I` compare with `==`; float vectors, `Color`, `Quaternion` and `Rect2` compare component-wise with `float.Equals`.
+- `BitReader.ReadBytes` now takes a `scoped Span<byte>`. Without it, a `stackalloc` buffer cannot be passed to a `ref BitReader` parameter. There is no behavior change.
+- Tests are in `KludgeUnitTests/Replication/CodecTests.cs`. They include a no-allocation check for enum `Write` and `IsChanged`.
+
 ### Step 4 — Quantization and tolerance
 
 Files:
