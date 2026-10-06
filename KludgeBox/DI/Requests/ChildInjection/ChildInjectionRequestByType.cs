@@ -1,4 +1,5 @@
 ﻿using Godot;
+using KludgeBox.Godot.Extensions;
 using Godot.Collections;
 using KludgeBox.DI.Exceptions;
 using KludgeBox.Reflection.Access;
@@ -46,7 +47,7 @@ public class ChildInjectionRequestByType : IProcessingRequest
 
         if (foundNode is null)
         {
-            throw new NotFoundException($"Unable to {(_deepSearch ? "deep" : "shallow")} find children by type {_type.FullName} for node @ {node.GetPath()} (type of {node.GetType().FullName}). Target member: {_memberAccessor.Member.Name}");
+            throw new NotFoundException($"Unable to {(_deepSearch ? "deep" : "shallow")} find children by type {_type.FullName} for node @ {node.GetDiagnosticPath()} (type of {node.GetType().FullName}). Target member: {_memberAccessor.Member.Name}");
         }
         
         _memberAccessor.SetValue(instance, foundNode);

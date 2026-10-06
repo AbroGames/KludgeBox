@@ -18,6 +18,14 @@ public static class NodeTreeExtensions
     }
     
     /// <summary>
+    /// The node path for an error message: <c>GetPath()</c> outside the scene tree logs an engine error and returns an empty path.
+    /// </summary>
+    public static string GetDiagnosticPath(this Node node)
+    {
+        return node.IsInsideTree() ? node.GetPath().ToString() : $"{node.Name} (outside the scene tree)";
+    }
+
+    /// <summary>
     /// Rename the child node and add it to current node.
     /// </summary>
     public static void AddChildWithName(this Node node, Node child, string name)

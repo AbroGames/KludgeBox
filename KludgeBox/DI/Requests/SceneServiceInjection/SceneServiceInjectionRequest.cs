@@ -1,4 +1,5 @@
 ﻿using Godot;
+using KludgeBox.Godot.Extensions;
 using KludgeBox.Reflection.Access;
 
 namespace KludgeBox.DI.Requests.SceneServiceInjection;
@@ -23,7 +24,7 @@ public class SceneServiceInjectionRequest : IProcessingRequest
         
         if (service is null)
         {
-            throw new InvalidOperationException($"Service of type {_serviceType} not found for node {nodeInstance.GetPath()}@{nodeInstance.GetType().Name}.");
+            throw new InvalidOperationException($"Service of type {_serviceType} not found for node {nodeInstance.GetDiagnosticPath()}@{nodeInstance.GetType().Name}.");
         }
         
         _memberAccessor.SetValue(instance, service);

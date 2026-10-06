@@ -1,4 +1,5 @@
 ﻿using Godot;
+using KludgeBox.Godot.Extensions;
 using KludgeBox.DI.Exceptions;
 using KludgeBox.Reflection.Access;
 
@@ -45,7 +46,7 @@ public class ParentInjectionRequestByType : IProcessingRequest
         
         if (foundNode is null)
         {
-            throw new NotFoundException($"Unable to find parent by type {_type.FullName} for node @ {node.GetPath()} (type of {node.GetType().FullName}). Target member: {_memberAccessor.Member.Name}");
+            throw new NotFoundException($"Unable to find parent by type {_type.FullName} for node @ {node.GetDiagnosticPath()} (type of {node.GetType().FullName}). Target member: {_memberAccessor.Member.Name}");
         }
         
         _memberAccessor.SetValue(node, foundNode);

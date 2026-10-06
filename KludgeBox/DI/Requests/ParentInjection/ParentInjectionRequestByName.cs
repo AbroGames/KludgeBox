@@ -1,4 +1,5 @@
 ﻿using Godot;
+using KludgeBox.Godot.Extensions;
 using Humanizer;
 using KludgeBox.DI.Exceptions;
 using KludgeBox.Reflection.Access;
@@ -50,7 +51,7 @@ public class ParentInjectionRequestByName : IProcessingRequest
 
         if (foundNode is null)
         {
-            throw new NotFoundException($"Unable to {(_deepSearch ? "deep" : "shallow")} find children by name {_name} for node @ {node.GetPath()} (type of {node.GetType().FullName}). Target member: {_memberAccessor.Member.Name}");
+            throw new NotFoundException($"Unable to {(_deepSearch ? "deep" : "shallow")} find children by name {_name} for node @ {node.GetDiagnosticPath()} (type of {node.GetType().FullName}). Target member: {_memberAccessor.Member.Name}");
         }
         
         _memberAccessor.SetValue(instance, foundNode);

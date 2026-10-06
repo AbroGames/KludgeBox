@@ -1,4 +1,5 @@
 ﻿using Godot;
+using KludgeBox.Godot.Extensions;
 using KludgeBox.DI.Requests.LoggerInjection;
 using KludgeBox.Reflection.Access;
 using Serilog;
@@ -28,7 +29,7 @@ public class NotNullCheckRequest : IProcessingRequest
             var nodePathInfo = "";
             if (instance is Node node)
             {
-                nodePathInfo = $" Target node is at {node.GetPath()}";
+                nodePathInfo = $" Target node is at {node.GetDiagnosticPath()}";
             }
 
             var exception = new NotNullCheckFailedException(
